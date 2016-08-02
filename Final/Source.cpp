@@ -582,7 +582,7 @@ void myMouse(int button, int state, int x, int y)
 	//y = winHeight - y - 1;
 }
 
-void generateCube(GLuint* list, GLdouble* arr, bool isSolid = false) {
+void generateCube(GLuint* list, GLdouble* arr, bool isSolid = true) {
 	*list = glGenLists(1);
 	glNewList(*list, GL_COMPILE);
 	glPushMatrix();
