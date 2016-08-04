@@ -125,7 +125,7 @@ void drawAxes(GLdouble lineLength) {
 	strs << phi;
 	std::string str = strs.str();
 	const char* x = str.c_str();
-*/
+	*/
 	print(10, 0, 0, "x", GLUT_BITMAP_TIMES_ROMAN_24);
 	print(0, 10, 0, "y", GLUT_BITMAP_TIMES_ROMAN_24);
 	print(0, 0, 10, "z", GLUT_BITMAP_TIMES_ROMAN_24);
@@ -197,7 +197,7 @@ void drawPhalanxRow(bool isFirstRow = false) {
 void drawHand() {
 	glCallList(palm);
 
-	glTranslatef((-palmSize[0] + phalanxSize[0] ) / 2, palmSize[1] + PHALANX_SPACE, 0);
+	glTranslatef((-palmSize[0] + phalanxSize[0]) / 2, palmSize[1] + PHALANX_SPACE, 0);
 	glRotatef(fistAngle, 1, 0, 0);
 	drawPhalanxRow();
 	glTranslatef(0, phalanxSize[1] + PHALANX_SPACE, 0);
@@ -243,7 +243,12 @@ void drawArm() {
 void drawRobot() {
 	glPointSize(3.0);
 
-	glColor3f(0.0, 0.0, 1.0);
+	GLfloat whiteColor[] = { 0.0, 0.0, 1.0 };
+	////glColor3f(0.0, 0.0, 1.0);
+	//glMaterialfv(GL_FRONT, GL_AMBIENT, whiteColor);
+	//glMaterialfv(GL_FRONT, GL_DIFFUSE, whiteColor);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, whiteColor);
+
 
 	glBegin(GL_POINTS);
 	glVertex3f(rx, ry, rz);
@@ -307,19 +312,17 @@ void myDisplay(void)
 
 	GLfloat whiteColor[] = { 1.0, 1.0, 1.0, 1.0 };
 
-	glLightfv(GL_LIGHT1, GL_AMBIENT, whiteColor);
 
-	glEnable(GL_LIGHT1);
-
-	GLfloat light1pt[] = { 0.0, 2.0, 0.0, 0.0 };
-	//glLightfv(GL_LIGHT1, GL_POSITION, light1pt);
-	//glLightfv(GL_LIGHT1, GL_DIFFUSE, whiteColor);
-	//glLightfv(GL_LIGHT1, GL_SPECULAR, whiteColor);
 	//glEnable(GL_LIGHT1);
 
-	drawFloor();
+	GLfloat light1pt[] = { 0.0, 2.0, 0.0, 1.0 };
+	glLightfv(GL_LIGHT1, GL_POSITION, light1pt);
+	glLightfv(GL_LIGHT1, GL_AMBIENT, whiteColor);
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, whiteColor);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, whiteColor);
+	glEnable(GL_LIGHT1);
 
-	glEnable(GL_DEPTH_TEST);
+	drawFloor();
 
 	drawAxes(10000.0);
 
@@ -589,7 +592,7 @@ void generateCube(GLuint* list, GLdouble* arr, bool isSolid = true) {
 
 	glScalefv(arr);
 	glTranslatef(0, 0.5, 0);
-	
+
 	isSolid ? glutSolidCube(1.0) : glutWireCube(1.0);
 
 	glPopMatrix();
@@ -608,7 +611,7 @@ void generateElbow() {
 }
 
 void generateModels() {
-	generateCube(&head, headSize, false);
+	generateCube(&head, headSize, true);
 	generateCube(&body, bodySize);
 	generateCube(&upperArm, upperArmSize);
 	generateElbow();
@@ -656,8 +659,10 @@ void init(void)
 	glutFullScreen();
 
 	glutSetCursor(GLUT_CURSOR_NONE);
+	glEnable(GL_DEPTH_TEST);
 
-	//glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_COLOR_MATERIAL);
 }
 
 int main(int argc, char** argv)
