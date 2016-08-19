@@ -113,7 +113,28 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Arm.cpp" />
+    <ClCompile Include="Body.cpp" />
+    <ClCompile Include="Drawable.cpp" />
+    <ClCompile Include="Hand.cpp" />
+    <ClCompile Include="Head.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Rect.cpp" />
+    <ClCompile Include="Robot.cpp" />
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Arm.h" />
+    <ClInclude Include="Body.h" />
+    <ClInclude Include="Drawable.h" />
+    <ClInclude Include="Hand.h" />
+    <ClInclude Include="Head.h" />
+    <ClInclude Include="Rect.h" />
+    <ClInclude Include="Robot.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
