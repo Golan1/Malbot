@@ -327,7 +327,6 @@ void myDisplay(void)
 	drawAxes(10000.0);
 
 	//glScalef(10.0, 10.0, 10.0);
-	//drawHand();
 	drawRobot();
 
 	//glutSwapBuffers();
@@ -611,7 +610,7 @@ void generateElbow() {
 }
 
 void generateModels() {
-	generateCube(&head, headSize, true);
+	generateCube(&head, headSize, false);
 	generateCube(&body, bodySize);
 	generateCube(&upperArm, upperArmSize);
 	generateElbow();
