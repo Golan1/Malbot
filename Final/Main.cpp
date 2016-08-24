@@ -1,40 +1,25 @@
-#include "Robot.h"
 #include <stdio.h>
 #include <windows.h>
-#include <math.h>
 #include "Utils.h"
-//#include <sstream>
+#include "Robot.h"
+#include "Eye.h"
+#include "Texture2D.h"
+#include "Floor.h"
 
-enum class ViewMode { firstPerson, thirdPerson };
-
-/*  Create checkerboard texture  */
-#define checkImageWidth 64
-#define checkImageHeight 64
-static GLubyte checkImage[checkImageHeight][checkImageWidth][4];
-static GLuint texName;
-#define FLOOR_LENGTH 50
-
-ViewMode viewMode;
+#define FLOOR_SIZE 50.0
 
 GLint winWidth = 600, winHeight = 600;
 
 GLdouble dnear = 0.001, dfar = 1000.0;
 GLdouble viewAngle = 50.0;
 
-GLdouble eyex, eyey, eyez;
-
-Vector3d viewDirection;
-
 GLdouble vtheta, vphi;
-
-GLdouble upx = 0.0, upy = 1.0, upz = 0.0;
 
 GLint startX;
 
-GLdouble thirdPersonHeightDiff = 3.0;
-GLdouble thirdPersonBehindDiff = 10.0;
-
 Robot* robot;
+Eye* eye;
+Floor* floorSurface;
 
 void drawAxes(GLdouble lineLength) {
 
@@ -62,58 +47,18 @@ void drawAxes(GLdouble lineLength) {
 
 	glColor3f(0.0, 0.0, 0.0);
 
-	/*std::ostringstream strs;
-	strs << phi;
-	std::string str = strs.str();
-	const char* x = str.c_str();
-	*/
 	Utils::print(10, 0, 0, "x", GLUT_BITMAP_TIMES_ROMAN_24);
 	Utils::print(0, 10, 0, "y", GLUT_BITMAP_TIMES_ROMAN_24);
 	Utils::print(0, 0, 10, "z", GLUT_BITMAP_TIMES_ROMAN_24);
-	//print(0, 3, 0, (char *)x, GLUT_BITMAP_TIMES_ROMAN_10);
-}
-
-void setCameraPosition() {
-	eyex = robot->location[0];
-	eyey = robot->location[1];
-	eyez = robot->location[2];
-
-	if (viewMode == ViewMode::thirdPerson) {
-		GLdouble normal = Utils::calcNormal(viewDirection);
-		eyex -= thirdPersonBehindDiff * viewDirection[0] / normal;
-		eyey += thirdPersonHeightDiff;
-		eyez -= thirdPersonBehindDiff * viewDirection[2] / normal;
-	}
-
-	GLdouble refx = eyex + viewDirection[0];
-	GLdouble refy = eyey + viewDirection[1];
-	GLdouble refz = eyez + viewDirection[2];
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(eyex, eyey, eyez, refx, refy, refz, upx, upy, upz);
-}
-
-void drawFloor() {
-	glEnable(GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-	glBindTexture(GL_TEXTURE_2D, texName);
-	glBegin(GL_QUADS);
-	glTexCoord2f(0.0, 0.0); glVertex3f(-FLOOR_LENGTH, -0.1, -FLOOR_LENGTH);
-	glTexCoord2f(0.0, 1.0); glVertex3f(-FLOOR_LENGTH, -0.1, FLOOR_LENGTH);
-	glTexCoord2f(1.0, 1.0); glVertex3f(FLOOR_LENGTH, -0.1, FLOOR_LENGTH);
-	glTexCoord2f(1.0, 0.0); glVertex3f(FLOOR_LENGTH, -0.1, -FLOOR_LENGTH);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
 }
 
 void myDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	setCameraPosition();
+	eye->activate();
+	
 
-	GLfloat whiteColor[] = { 1.0, 1.0, 1.0, 1.0 };
-
+	GLfloat whiteColor[] = { 1.0, 1.0, 1.0, 0.0 };
 
 	//glEnable(GL_LIGHT1);
 
@@ -124,13 +69,15 @@ void myDisplay()
 	glLightfv(GL_LIGHT1, GL_SPECULAR, whiteColor);
 	glEnable(GL_LIGHT1);
 
-	drawFloor();
+	//drawFloor();
 
 	drawAxes(10000.0);
 
-	//glScalef(10.0, 10.0, 10.0);
 	robot->Draw();
 
+	floorSurface->Draw();
+
+	// For some reason this crashes my computer:
 	//glutSwapBuffers();
 
 	glFlush();
@@ -174,20 +121,6 @@ void myReshape(int width, int height)
 	setProjection();
 }
 
-void toggleFirstThirdView() {
-	switch (viewMode)
-	{
-	case ViewMode::firstPerson:
-		viewMode = ViewMode::thirdPerson;
-		break;
-	case ViewMode::thirdPerson:
-		viewMode = ViewMode::firstPerson;
-		break;
-	default:
-		break;
-	}
-}
-
 void myKeyboard(unsigned char key, int x, int y)
 {
 	if (key >= 65 && key <= 90) {
@@ -214,7 +147,7 @@ void myKeyboard(unsigned char key, int x, int y)
 		break;
 	case 'x':
 	case 'X':
-		toggleFirstThirdView();
+		eye->ToggleViewMode();
 		break;
 	default:
 		break;
@@ -230,43 +163,18 @@ void myKeyboardUp(unsigned char key, int x, int y) {
 	}
 }
 
-void calcDirections() {
-	double p = Utils::degToRad(vphi);
-	double t = Utils::degToRad(vtheta);
-
-	viewDirection = { sin(p), cos(t), cos(p) };
-
-	Utils::normalize(viewDirection);
-
-	//if (!flyMode) {
-	robot->head->setHeadDirection(vtheta, vphi);
-	//}
-}
-
 void calcChanges() {
-	calcDirections();
+	robot->head->setDirection(vtheta, vphi);
 	robot->CalcMovement();
+
+	eye->setDirection(vtheta, vphi);
+	eye->setLocation(robot->location);
 }
 
 void myTimer(int interval) {
 	calcChanges();
 	glutPostRedisplay();
 	glutTimerFunc(interval, myTimer, interval);
-}
-
-void makeCheckImage()
-{
-	int i, j, c;
-
-	for (i = 0; i < checkImageHeight; i++) {
-		for (j = 0; j < checkImageWidth; j++) {
-			c = ((((i & 0x8) == 0) ^ ((j & 0x8)) == 0)) * 255;
-			checkImage[i][j][0] = (GLubyte)c;
-			checkImage[i][j][1] = (GLubyte)c;
-			checkImage[i][j][2] = (GLubyte)c;
-			checkImage[i][j][3] = (GLubyte)255;
-		}
-	}
 }
 
 void myMouse(int button, int state, int x, int y)
@@ -295,21 +203,11 @@ void generateModels() {
 
 	robot = new Robot();
 	robot->Init();
-	makeCheckImage();
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-	glGenTextures(1, &texName);
-	glBindTexture(GL_TEXTURE_2D, texName);
+	eye = new Eye();
 
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
-		GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-		GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth,
-		checkImageHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-		checkImage);
+	floorSurface = new Floor(FLOOR_SIZE);
+	floorSurface->Init();
 }
 
 void registerCallbacks() {
@@ -329,15 +227,16 @@ void init()
 	GetCursorPos(&cursorPos);
 	startX = cursorPos.x;
 
+	glutSetCursor(GLUT_CURSOR_NONE);
+
 	glClearColor(1.0, 1.0, 1.0, 0.0);
 
 	glutFullScreen();
 
-	glutSetCursor(GLUT_CURSOR_NONE);
 	glEnable(GL_DEPTH_TEST);
 
 	glEnable(GL_LIGHTING);
-	glEnable(GL_COLOR_MATERIAL);
+	//glEnable(GL_COLOR_MATERIAL);
 }
 
 int main(int argc, char** argv)

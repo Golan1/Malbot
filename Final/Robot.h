@@ -21,7 +21,6 @@ public:
 	void ControlLowerArm(int direction, Side side);
 	void ControlFist(int direction, Side side);
 
-	void Move(Vector3d dir);
 	void CalcMovement();
 
 	Vector3d location;

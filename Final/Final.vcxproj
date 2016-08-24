@@ -116,6 +116,8 @@
     <ClCompile Include="Arm.cpp" />
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Drawable.cpp" />
+    <ClCompile Include="Eye.cpp" />
+    <ClCompile Include="Floor.cpp" />
     <ClCompile Include="Hand.cpp" />
     <ClCompile Include="Head.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -123,18 +125,28 @@
     <ClCompile Include="Robot.cpp" />
     <ClCompile Include="Source.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="Vector3d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Arm.h" />
     <ClInclude Include="Body.h" />
     <ClInclude Include="Drawable.h" />
+    <ClInclude Include="Eye.h" />
+    <ClInclude Include="Floor.h" />
     <ClInclude Include="Hand.h" />
     <ClInclude Include="Head.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="stb_image.h" />
+    <ClInclude Include="Texture2D.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="Vector3d.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Textures\parquet.jpg" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

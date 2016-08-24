@@ -1,9 +1,12 @@
 #include "Robot.h"
 
 
-
 Robot::Robot()
 {
+	head = new Head({ 1.0, 1.0, 1.0 });
+	body = new Rect({ 2.0, 1.0, 1.0 });
+	leftArm = new Arm();
+	rightArm = new  Arm();
 }
 
 
@@ -13,13 +16,9 @@ Robot::~Robot()
 
 void Robot::Init()
 {
-	head = new Head({ 1.0, 1.0, 1.0 });
 	head->Init();
-	body = new Rect({ 2.0, 1.0, 1.0 });
 	body->Init();
-	leftArm = new Arm();
 	leftArm->Init();
-	rightArm = new  Arm();
 	rightArm->Init();
 
 	location = { 0.0, head->size[1] / 2 + body->size[1], 0.0 };
@@ -30,15 +29,15 @@ void Robot::Draw()
 {
 	glPointSize(3.0);
 
-	GLfloat whiteColor[] = { 0.0, 0.0, 1.0 };
-	////glColor3f(0.0, 0.0, 1.0);
-	//glMaterialfv(GL_FRONT, GL_AMBIENT, whiteColor);
-	//glMaterialfv(GL_FRONT, GL_DIFFUSE, whiteColor);
+	GLfloat whiteColor[] = { 1.0, 1.0, 1.0 };
+	//glColor3f(0.0, 0.0, 1.0);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, whiteColor);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, whiteColor);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, whiteColor);
 
 
 	glBegin(GL_POINTS);
-	glVertex3d(location[0], location[1], location[2]);
+	glVertex3dv(location.vec);
 	glEnd();
 
 	glPushMatrix();
@@ -46,16 +45,7 @@ void Robot::Draw()
 		// move the robot to its location
 		glTranslatef(location[0], location[1] - head->size[1] / 2, location[2]);
 
-		glPushMatrix();
-		{
-			// rotate the head accordint to the user's view vector
-			glRotatef(head->phi, 0, 1, 0);
-			glRotatef(90 - head->theta, -1, 0, 0);
-
-			head->Draw();
-
-		}
-		glPopMatrix();
+		head->Draw();
 
 		glPushMatrix();
 		{
@@ -164,13 +154,6 @@ void Robot::ControlFist(int direction, Side side)
 	}
 }
 
-void Robot::Move(Vector3d dir)
-{
-	direction[0] += dir[0];
-	direction[1] += dir[1];
-	direction[2] += dir[2];
-}
-
 void Robot::CalcMovement()
 {
 	if (Utils::isKeyPressed('d')) {
@@ -184,7 +167,7 @@ void Robot::CalcMovement()
 
 	direction = { cos(a), 0, sin(a) };
 
-	Utils::normalize(direction);
+	direction.normalize();
 
 	int moveDirection = 0;
 
@@ -195,8 +178,6 @@ void Robot::CalcMovement()
 		moveDirection = -1;
 	}
 
-	location[0] += moveDirection * direction[0] * MOVE_SPEED;
-	location[1] += moveDirection * direction[1] * MOVE_SPEED;
-	location[2] += moveDirection * direction[2] * MOVE_SPEED;
+	location += moveDirection * MOVE_SPEED * direction;
 }
 

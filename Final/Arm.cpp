@@ -1,11 +1,12 @@
 #include "Arm.h"
 
-
-
 Arm::Arm()
 {
+	upperArm = new Rect({ ARM_THICKNESS, 1.0, ARM_THICKNESS });
+	lowerArm = new Rect({ ARM_THICKNESS, 0.7, ARM_THICKNESS });
+	elbow = new Sphere(ARM_THICKNESS / 1.5);
+	hand = new Hand();
 }
-
 
 Arm::~Arm()
 {
@@ -13,13 +14,9 @@ Arm::~Arm()
 
 void Arm::Init()
 {
-	upperArm = new Rect({ ARM_THICKNESS, 1.0, ARM_THICKNESS });
 	upperArm->Init();
-	lowerArm = new Rect({ ARM_THICKNESS, 0.7, ARM_THICKNESS });
 	lowerArm->Init();
-	elbow = new Sphere(ARM_THICKNESS / 1.5);
 	elbow->Init();
-	hand = new Hand();
 	hand->Init();
 }
 

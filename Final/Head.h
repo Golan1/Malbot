@@ -1,5 +1,6 @@
 #pragma once
 #include "Rect.h"
+#include "Sphere.h"
 
 #define HEAD_MAX_LOOKING_ANGLE 30
 
@@ -13,8 +14,11 @@ public:
 	void Init();
 	void Draw();
 
-	void setHeadDirection(GLdouble t, GLdouble p);
+	void setDirection(GLdouble t, GLdouble p);
 
-	GLdouble theta, phi;
+private:
+	GLdouble theta = 0;
+	GLdouble phi = 0;
+	Sphere* antena;
 };
 

@@ -13,14 +13,6 @@ void Utils::print(GLint x, GLint y, GLint z, char * str, void * font)
 	}
 }
 
-void Utils::normalize(Vector3d vec)
-{
-	GLdouble normal = calcNormal(vec);
-	vec[0] /= normal;
-	vec[1] /= normal;
-	vec[2] /= normal;
-}
-
 bool Utils::isKeyPressed(char key)
 {
 	if (key >= 65 && key <= 90) {
