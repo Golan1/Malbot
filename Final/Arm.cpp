@@ -2,9 +2,9 @@
 
 Arm::Arm()
 {
-	upperArm = new Rect({ ARM_THICKNESS, 1.0, ARM_THICKNESS });
-	lowerArm = new Rect({ ARM_THICKNESS, 0.7, ARM_THICKNESS });
-	elbow = new Sphere(ARM_THICKNESS / 1.5);
+	upperArm = new Rect({ ARM_THICKNESS, 1.0f, ARM_THICKNESS });
+	lowerArm = new Rect({ ARM_THICKNESS, 0.7f, ARM_THICKNESS });
+	elbow = new Sphere(ARM_THICKNESS / 1.5f);
 	hand = new Hand();
 }
 

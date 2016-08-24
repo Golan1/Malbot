@@ -1,5 +1,4 @@
 #pragma once
-#include "GL\glut.h"
 #include "Vector3f.h"
 #include <math.h>
 
@@ -12,7 +11,7 @@ class Utils
 public:
 	static char keys[26];
 
-	inline static double degToRad(double x) { return x * PI / 180; };
+	inline static GLfloat degToRad(GLfloat x) { return x * PI / 180; };
 	inline static void glScalefv(Vector3f vec) { glScalef(vec[0], vec[1], vec[2]); }
 	static void print(GLint x, GLint y, GLint z, char *str, void *font);
 

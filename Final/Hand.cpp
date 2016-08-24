@@ -2,8 +2,8 @@
 
 Hand::Hand()
 {
-	phalanx = new Rect({ FINGER_SPACE * 2.0, PHALANX_SPACE * 5.0, FINGER_SPACE * 2.0 });
-	palm = new Rect({ 14.0 * FINGER_SPACE, PHALANX_SPACE * 15.0, FINGER_SPACE * 3.5 });
+	phalanx = new Rect({ FINGER_SPACE * 2.0f, PHALANX_SPACE * 5.0f, FINGER_SPACE * 2.0f });
+	palm = new Rect({ 14.0f * FINGER_SPACE, PHALANX_SPACE * 15.0f, FINGER_SPACE * 3.5f });
 }
 
 

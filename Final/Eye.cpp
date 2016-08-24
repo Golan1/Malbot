@@ -27,12 +27,12 @@ void Eye::ToggleViewMode()
 	}
 }
 
-void Eye::setDirection(GLdouble vtheta, GLdouble vphi)
+void Eye::setDirection(GLfloat vtheta, GLfloat vphi)
 {
-	GLdouble p = Utils::degToRad(vphi);
-	GLdouble t = Utils::degToRad(vtheta);
+	GLfloat p = Utils::degToRad(vphi);
+	GLfloat t = Utils::degToRad(vtheta);
 
-	direction = { sin(p), cos(t), cos(p) };
+	direction = { sinf(p), cosf(t), cosf(p) };
 
 	direction.normalize();
 }

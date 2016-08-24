@@ -40,19 +40,19 @@ void Head::Draw()
 
 		glPopAttrib();
 
-		glTranslated(0, size[1]/2, 0);
+		glTranslated(0, size[1] / 2, 0);
 
 		antena->Draw();
 	}
 	glPopMatrix();
-	
+
 
 	Rect::Draw();
-	
+
 	glPopMatrix();
 }
 
-void Head::setDirection(GLdouble t, GLdouble p)
+void Head::setDirection(GLfloat t, GLfloat p)
 {
 	theta = t;
 	phi = p;

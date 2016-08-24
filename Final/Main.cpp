@@ -6,14 +6,14 @@
 #include "Texture2D.h"
 #include "Floor.h"
 
-#define FLOOR_SIZE 50.0
+#define FLOOR_SIZE 200
 
 GLint winWidth = 600, winHeight = 600;
 
-GLdouble dnear = 0.001, dfar = 1000.0;
-GLdouble viewAngle = 50.0;
+GLfloat dnear = 0.001, dfar = 1000.0;
+GLfloat viewAngle = 50.0;
 
-GLdouble vtheta, vphi;
+GLfloat vtheta, vphi;
 
 GLint startX;
 
@@ -23,7 +23,7 @@ Floor* floorSurface;
 
 GLfloat light1pt[] = { 0.0, 0.1, 0.0, 1.0 };
 
-void drawAxes(GLdouble lineLength) {
+void drawAxes(GLfloat lineLength) {
 
 	glColor3d(0.0, 1.0, 0.0);
 
@@ -68,9 +68,9 @@ void myDisplay()
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, whiteColor);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, whiteColor);
 
-	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5);
-	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.75);
-	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.4);
+	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1);
+	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5);
+	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2);
 
 	glEnable(GL_LIGHT1);
 	
@@ -80,7 +80,7 @@ void myDisplay()
 
 	//drawFloor();
 
-	drawAxes(10000.0);
+	//drawAxes(10000.0);
 
 	robot->Draw();
 
@@ -117,7 +117,7 @@ void myPassiveMotion(int x, int y) {
 void setProjection() {
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(viewAngle, (GLdouble)winWidth / (GLdouble)winHeight, dnear, dfar);
+	gluPerspective(viewAngle, (GLfloat)winWidth / (GLfloat)winHeight, dnear, dfar);
 	glMatrixMode(GL_MODELVIEW);
 }
 
@@ -249,6 +249,9 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 
 	glEnable(GL_LIGHTING);
+
+	glutSetOption(GLUT_MULTISAMPLE, 8);
+
 	//glEnable(GL_COLOR_MATERIAL);
 }
 
@@ -258,7 +261,7 @@ int main(int argc, char** argv)
 
 	glutInit(&argc, argv);
 	//glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH| GLUT_MULTISAMPLE);
 	windowId = glutCreateWindow("WOW!");
 
 	init();

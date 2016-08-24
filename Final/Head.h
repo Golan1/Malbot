@@ -14,11 +14,11 @@ public:
 	void Init();
 	void Draw();
 
-	void setDirection(GLdouble t, GLdouble p);
+	void setDirection(GLfloat t, GLfloat p);
 
 private:
-	GLdouble theta = 0;
-	GLdouble phi = 0;
+	GLfloat theta = 0;
+	GLfloat phi = 0;
 	Sphere* antena;
 };
 

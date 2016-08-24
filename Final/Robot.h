@@ -2,8 +2,8 @@
 #include "Arm.h"
 #include "Head.h"
 
-#define MOVE_SPEED 0.3
-#define TWIST_SPEED 5.0
+#define MOVE_SPEED 0.3f
+#define TWIST_SPEED 5.0f
 
 enum  class Side { Both , Right, Left };
 
@@ -31,7 +31,7 @@ private:
 	Arm* leftArm;
 	Arm* rightArm;
 
-	GLdouble robotAngle = 0.0;
+	GLfloat robotAngle = 0.0;
 	Vector3f direction;
 };
 

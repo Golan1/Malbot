@@ -4,13 +4,13 @@ class Sphere :
 	public Drawable
 {
 public:
-	Sphere(GLdouble radius);
+	Sphere(GLfloat radius);
 	~Sphere();
 
 	void Init();
 	void Draw();
 
-	GLdouble radius;
+	GLfloat radius;
 private:
 };
 

@@ -2,10 +2,10 @@
 #include "Sphere.h";
 #include "Hand.h";
 
-#define SHOULDER_SPEED 5.0
-#define ELBOW_SPEED 3.0
-#define MAX_ELBOW_ANGLE 100.0
-#define ARM_THICKNESS 0.2
+#define SHOULDER_SPEED 5.0f
+#define ELBOW_SPEED 3.0f
+#define MAX_ELBOW_ANGLE 100.0f
+#define ARM_THICKNESS 0.2f
 
 class Arm :
 	public Drawable
@@ -26,7 +26,7 @@ private:
 	Sphere* elbow;
 	Hand* hand;
 
-	GLdouble shoulderAngle = -90;
-	GLdouble elbowAngle = 90;
+	GLfloat shoulderAngle = -90;
+	GLfloat elbowAngle = 90;
 };
 

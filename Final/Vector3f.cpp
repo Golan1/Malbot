@@ -13,13 +13,13 @@ Vector3f::Vector3f(void)
 }
 
 
-Vector3f::Vector3f(GLdouble x, GLdouble y, GLdouble z)
+Vector3f::Vector3f(GLfloat x, GLfloat y, GLfloat z)
 {
 	set(x, y, z);
 }
 
 
-Vector3f::Vector3f(const GLdouble *v)
+Vector3f::Vector3f(const GLfloat *v)
 {
 	set(v[0], v[1], v[2]);
 }
@@ -38,7 +38,7 @@ Vector3f& Vector3f::operator= (const Vector3f& v)
 }
 
 
-void Vector3f::set(GLdouble x, GLdouble y, GLdouble z)
+void Vector3f::set(GLfloat x, GLfloat y, GLfloat z)
 {
 	vec[0] = x;
 	vec[1] = y;
@@ -46,7 +46,7 @@ void Vector3f::set(GLdouble x, GLdouble y, GLdouble z)
 }
 
 
-GLdouble& Vector3f::operator[](int i)
+GLfloat& Vector3f::operator[](int i)
 {
 	if ((i >= 0) && (i < 3))
 		return vec[i];
@@ -57,7 +57,7 @@ GLdouble& Vector3f::operator[](int i)
 }
 
 
-GLdouble Vector3f::operator[](int i) const
+GLfloat Vector3f::operator[](int i) const
 {
 	if ((i >= 0) && (i < 3))
 		return vec[i];
@@ -86,7 +86,7 @@ Vector3f& Vector3f::operator-=(const Vector3f& v)
 }
 
 
-Vector3f& Vector3f::operator*=(GLdouble s)
+Vector3f& Vector3f::operator*=(GLfloat s)
 {
 	vec[0] *= s;
 	vec[1] *= s;
@@ -95,7 +95,7 @@ Vector3f& Vector3f::operator*=(GLdouble s)
 }
 
 
-Vector3f& Vector3f::operator/=(GLdouble s)
+Vector3f& Vector3f::operator/=(GLfloat s)
 {
 	vec[0] /= s;
 	vec[1] /= s;
@@ -122,13 +122,13 @@ Vector3f Vector3f::operator-(void) const
 }
 
 
-Vector3f Vector3f::operator*(GLdouble s) const
+Vector3f Vector3f::operator*(GLfloat s) const
 {
 	return Vector3f(vec[0] * s, vec[1] * s, vec[2] * s);
 }
 
 
-Vector3f Vector3f::operator/(GLdouble s) const
+Vector3f Vector3f::operator/(GLfloat s) const
 {
 	return Vector3f(vec[0] / s, vec[1] / s, vec[2] / s);
 }
@@ -150,13 +150,13 @@ bool Vector3f::operator!=(const Vector3f& v) const
 }
 
 
-GLdouble Vector3f::length(void) const
+GLfloat Vector3f::length(void) const
 {
 	return sqrt(lengthSquared());
 }
 
 
-GLdouble Vector3f::lengthSquared(void) const
+GLfloat Vector3f::lengthSquared(void) const
 {
 	return vec[0] * vec[0] + vec[1] * vec[1] + vec[2] * vec[2];
 }
@@ -174,7 +174,7 @@ void Vector3f::normalize(void)
 }
 
 
-GLdouble Vector3f::dot(const Vector3f& v) const
+GLfloat Vector3f::dot(const Vector3f& v) const
 {
 	return vec[0] * v.vec[0] + vec[1] * v.vec[1] + vec[2] * v.vec[2];
 }
@@ -188,13 +188,13 @@ Vector3f Vector3f::cross(const Vector3f& v) const
 }
 
 
-GLdouble Vector3f::distance(const Vector3f& v) const
+GLfloat Vector3f::distance(const Vector3f& v) const
 {
 	return sqrt(distanceSquared(v));
 }
 
 
-GLdouble Vector3f::distanceSquared(const Vector3f& v) const
+GLfloat Vector3f::distanceSquared(const Vector3f& v) const
 {
 	double dx, dy, dz;
 	dx = vec[0] - v.vec[0];
@@ -207,7 +207,7 @@ GLdouble Vector3f::distanceSquared(const Vector3f& v) const
 void Vector3f::drawLine(void) const
 {
 	glBegin(GL_LINES);
-	glVertex3d(0, 0, 0);
-	glVertex3dv(vec);
+	glVertex3f(0, 0, 0);
+	glVertex3fv(vec);
 	glEnd();
 }

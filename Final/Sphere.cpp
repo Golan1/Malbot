@@ -2,7 +2,7 @@
 
 
 
-Sphere::Sphere(GLdouble radius) : radius(radius)
+Sphere::Sphere(GLfloat radius) : radius(radius)
 {
 }
 

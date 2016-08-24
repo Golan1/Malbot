@@ -5,12 +5,12 @@ class Floor :
 	public Drawable
 {
 public:
-	Floor(GLdouble size);
+	Floor(int size);
 	~Floor();
 	void Init();
 
 private:
-	GLdouble _size;
+	int _size;
 	Texture2D* _texture;
 };
 

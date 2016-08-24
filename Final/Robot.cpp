@@ -31,17 +31,18 @@ void Robot::Init()
 
 void Robot::Draw()
 {
+
 	glPointSize(3.0);
 
-	GLfloat whiteColor[] = { 0.5, 0.5, 0.5 };
+	Vector3f whiteColor = { 0.5, 0.5, 0.5 };
 	//glColor3d(0.0, 0.0, 1.0);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, whiteColor);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, whiteColor);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, whiteColor);
+	glMaterialfv(GL_FRONT, GL_AMBIENT, whiteColor.vec);
+	glMaterialfv(GL_FRONT, GL_DIFFUSE, whiteColor.vec);
+	glMaterialfv(GL_FRONT, GL_SPECULAR, whiteColor.vec);
 
 
 	glBegin(GL_POINTS);
-	glVertex3dv(location.vec);
+	glVertex3fv(location.vec);
 	glEnd();
 
 	glPushMatrix();
@@ -167,9 +168,9 @@ void Robot::CalcMovement()
 		Twist(Side::Left);
 	}
 
-	double a = Utils::degToRad(robotAngle + 90);
+	GLfloat a = Utils::degToRad(robotAngle + 90);
 
-	direction = { cos(a), 0, sin(a) };
+	direction = { cosf(a), 0.f, sinf(a) };
 
 	direction.normalize();
 

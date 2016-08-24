@@ -2,7 +2,7 @@
 
 
 
-Floor::Floor(GLdouble size)
+Floor::Floor(int size)
 {
 	_size = size;
 	_texture = new Texture2D("Textures\\parquet.jpg");
@@ -28,17 +28,19 @@ void Floor::Init()
 	glBegin(GL_QUADS);
 	glNormal3d(0.0, 1.0, 0.0);
 
+	GLfloat limit = -_size / 2;
+
 	for (i = 0; i < _size; i++)
 		for (j = 1; j <= _size; j++)
 		{
 			glTexCoord2d(0, 0);
-			glVertex3d((-_size / 2) + i, 0.0, (-_size / 2) + j);
+			glVertex3d(limit + i, 0.0, limit + j);
 			glTexCoord2d(1, 0);
-			glVertex3d((-_size / 2) + i + 1, 0.0, (-_size / 2) + j);
+			glVertex3d(limit + i + 1, 0.0, limit + j);
 			glTexCoord2d(1, 1);
-			glVertex3d((-_size / 2) + i + 1, 0.0, (-_size / 2) + j - 1);
+			glVertex3d(limit + i + 1, 0.0, limit + j - 1);
 			glTexCoord2d(0, 1);
-			glVertex3d((-_size / 2) + i, 0.0, (-_size / 2) + j - 1);
+			glVertex3d(limit + i, 0.0, limit + j - 1);
 		}
 
 	_texture->Disable();

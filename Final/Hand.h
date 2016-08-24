@@ -1,9 +1,9 @@
 #pragma once
 #include "Rect.h"
 
-#define FINGER_SPACE 0.05
-#define PHALANX_SPACE 0.06
-#define MAX_FIST_ANGLE 120.0
+#define FINGER_SPACE 0.05f
+#define PHALANX_SPACE 0.06f
+#define MAX_FIST_ANGLE 120.0f
 
 class Hand :
 	public Drawable
@@ -21,7 +21,7 @@ private:
 	Rect* phalanx;
 	Rect* palm;
 
-	GLdouble fistAngle = 45;
+	GLfloat fistAngle = 45;
 
 	void drawPhalanxRow(bool isFirstRow = false);
 };

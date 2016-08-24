@@ -1,8 +1,8 @@
 #pragma once
 #include "Utils.h"
 
-#define thirdPersonHeightDiff 3.0
-#define thirdPersonBehindDiff -10.0
+#define thirdPersonHeightDiff 3.0f
+#define thirdPersonBehindDiff -10.0f
 
 enum class ViewMode { firstPerson, thirdPerson };
 
@@ -13,7 +13,7 @@ public:
 	~Eye();
 
 	void ToggleViewMode();
-	void setDirection(GLdouble vtheta, GLdouble vphi);
+	void setDirection(GLfloat vtheta, GLfloat vphi);
 	void setLocation(Vector3f robotLocation);
 	void activate();
 
