@@ -14,11 +14,11 @@ public:
 
 	void ToggleViewMode();
 	void setDirection(GLdouble vtheta, GLdouble vphi);
-	void setLocation(Vector3d robotLocation);
+	void setLocation(Vector3f robotLocation);
 	void activate();
 
-	Vector3d location;
-	Vector3d direction;
+	Vector3f location;
+	Vector3f direction;
 
 private:
 	ViewMode viewMode;

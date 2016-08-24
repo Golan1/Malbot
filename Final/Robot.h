@@ -23,7 +23,7 @@ public:
 
 	void CalcMovement();
 
-	Vector3d location;
+	Vector3f location;
 	Head* head;
 
 private:
@@ -32,6 +32,6 @@ private:
 	Arm* rightArm;
 
 	GLdouble robotAngle = 0.0;
-	Vector3d direction;
+	Vector3f direction;
 };
 

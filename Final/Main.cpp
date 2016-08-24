@@ -21,31 +21,33 @@ Robot* robot;
 Eye* eye;
 Floor* floorSurface;
 
+GLfloat light1pt[] = { 0.0, 0.1, 0.0, 1.0 };
+
 void drawAxes(GLdouble lineLength) {
 
-	glColor3f(0.0, 1.0, 0.0);
+	glColor3d(0.0, 1.0, 0.0);
 
 	glBegin(GL_LINES);
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(0.0, lineLength, 0.0);
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(lineLength, 0.0, 0.0);
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(0.0, 0.0, lineLength);
+	glVertex3d(0.0, 0.0, 0.0);
+	glVertex3d(0.0, lineLength, 0.0);
+	glVertex3d(0.0, 0.0, 0.0);
+	glVertex3d(lineLength, 0.0, 0.0);
+	glVertex3d(0.0, 0.0, 0.0);
+	glVertex3d(0.0, 0.0, lineLength);
 	glEnd();
 
-	glColor3f(1.0, 0.0, 0.0);
+	glColor3d(1.0, 0.0, 0.0);
 
 	glBegin(GL_LINES);
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(0.0, -lineLength, 0.0);
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(-lineLength, 0.0, 0.0);
-	glVertex3f(0.0, 0.0, 0.0);
-	glVertex3f(0.0, 0.0, -lineLength);
+	glVertex3d(0.0, 0.0, 0.0);
+	glVertex3d(0.0, -lineLength, 0.0);
+	glVertex3d(0.0, 0.0, 0.0);
+	glVertex3d(-lineLength, 0.0, 0.0);
+	glVertex3d(0.0, 0.0, 0.0);
+	glVertex3d(0.0, 0.0, -lineLength);
 	glEnd();
 
-	glColor3f(0.0, 0.0, 0.0);
+	glColor3d(0.0, 0.0, 0.0);
 
 	Utils::print(10, 0, 0, "x", GLUT_BITMAP_TIMES_ROMAN_24);
 	Utils::print(0, 10, 0, "y", GLUT_BITMAP_TIMES_ROMAN_24);
@@ -60,14 +62,21 @@ void myDisplay()
 
 	GLfloat whiteColor[] = { 1.0, 1.0, 1.0, 0.0 };
 
-	//glEnable(GL_LIGHT1);
-
-	GLfloat light1pt[] = { 0.0, 2.0, 0.0, 1.0 };
 	glLightfv(GL_LIGHT1, GL_POSITION, light1pt);
+
 	glLightfv(GL_LIGHT1, GL_AMBIENT, whiteColor);
 	glLightfv(GL_LIGHT1, GL_DIFFUSE, whiteColor);
 	glLightfv(GL_LIGHT1, GL_SPECULAR, whiteColor);
+
+	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1.5);
+	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.75);
+	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.4);
+
 	glEnable(GL_LIGHT1);
+	
+	GLfloat globalAmbient[] = { 1.0, 1.0, 1.0, 1.0 };
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbient);
+
 
 	//drawFloor();
 
@@ -148,6 +157,10 @@ void myKeyboard(unsigned char key, int x, int y)
 	case 'x':
 	case 'X':
 		eye->ToggleViewMode();
+		break;
+	case 'z':
+	case 'Z':
+		light1pt[1]+= 0.1;
 		break;
 	default:
 		break;

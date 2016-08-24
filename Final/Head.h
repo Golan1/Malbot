@@ -8,7 +8,7 @@ class Head :
 	public Rect
 {
 public:
-	Head(Vector3d size);
+	Head(Vector3f size);
 	~Head();
 
 	void Init();

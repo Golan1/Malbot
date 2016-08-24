@@ -2,7 +2,7 @@
 
 
 
-Rect::Rect(Vector3d size, bool isSolid) : size(size), _isSolid(isSolid)
+Rect::Rect(Vector3f size, bool isSolid) : size(size), _isSolid(isSolid)
 {
 }
 

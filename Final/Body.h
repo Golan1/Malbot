@@ -4,7 +4,7 @@ class Body :
 	public Rect
 {
 public:
-	Body(Vector3d size);
+	Body(Vector3f size);
 	~Body();
 };
 

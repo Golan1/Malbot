@@ -2,20 +2,21 @@
 
 Hand::Hand()
 {
+	phalanx = new Rect({ FINGER_SPACE * 2.0, PHALANX_SPACE * 5.0, FINGER_SPACE * 2.0 });
+	palm = new Rect({ 14.0 * FINGER_SPACE, PHALANX_SPACE * 15.0, FINGER_SPACE * 3.5 });
 }
 
 
 Hand::~Hand()
 {
+	delete phalanx;
+	delete palm;
 }
 
 
 void Hand::Init()
 {
-	phalanx = new Rect({ FINGER_SPACE * 2.0, PHALANX_SPACE * 5.0, FINGER_SPACE * 2.0 });
 	phalanx->Init();
-
-	palm = new Rect({ 14.0 * FINGER_SPACE, PHALANX_SPACE * 15.0, FINGER_SPACE * 3.5 });
 	palm->Init();
 }
 

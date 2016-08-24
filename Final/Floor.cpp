@@ -26,19 +26,19 @@ void Floor::Init()
 	int j, i;
 
 	glBegin(GL_QUADS);
-	glNormal3f(0.0, 1.0, 0.0);
+	glNormal3d(0.0, 1.0, 0.0);
 
 	for (i = 0; i < _size; i++)
 		for (j = 1; j <= _size; j++)
 		{
-			glTexCoord2f(0, 0);
-			glVertex3f((-_size / 2) + i, 0.0, (-_size / 2) + j);
-			glTexCoord2f(1, 0);
-			glVertex3f((-_size / 2) + i + 1, 0.0, (-_size / 2) + j);
-			glTexCoord2f(1, 1);
-			glVertex3f((-_size / 2) + i + 1, 0.0, (-_size / 2) + j - 1);
-			glTexCoord2f(0, 1);
-			glVertex3f((-_size / 2) + i, 0.0, (-_size / 2) + j - 1);
+			glTexCoord2d(0, 0);
+			glVertex3d((-_size / 2) + i, 0.0, (-_size / 2) + j);
+			glTexCoord2d(1, 0);
+			glVertex3d((-_size / 2) + i + 1, 0.0, (-_size / 2) + j);
+			glTexCoord2d(1, 1);
+			glVertex3d((-_size / 2) + i + 1, 0.0, (-_size / 2) + j - 1);
+			glTexCoord2d(0, 1);
+			glVertex3d((-_size / 2) + i, 0.0, (-_size / 2) + j - 1);
 		}
 
 	_texture->Disable();

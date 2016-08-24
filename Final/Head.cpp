@@ -2,7 +2,7 @@
 
 
 
-Head::Head(Vector3d size) : Rect(size, false)
+Head::Head(Vector3f size) : Rect(size, false)
 {
 	antena = new Sphere(0.1);
 }
@@ -10,7 +10,7 @@ Head::Head(Vector3d size) : Rect(size, false)
 
 Head::~Head()
 {
-	
+	delete antena;
 }
 
 void Head::Init()

@@ -3,9 +3,9 @@
 class Rect : public Drawable
 {
 public:
-	Vector3d size;
+	Vector3f size;
 
-	Rect(Vector3d size, bool isSolid = true);
+	Rect(Vector3f size, bool isSolid = true);
 	~Rect();
 
 	virtual void Init();

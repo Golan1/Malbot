@@ -10,6 +10,10 @@ Arm::Arm()
 
 Arm::~Arm()
 {
+	delete upperArm;
+	delete lowerArm;
+	delete elbow;
+	delete hand;
 }
 
 void Arm::Init()

@@ -12,6 +12,10 @@ Robot::Robot()
 
 Robot::~Robot()
 {
+	delete head;
+	delete body;
+	delete leftArm;
+	delete rightArm;
 }
 
 void Robot::Init()
@@ -29,8 +33,8 @@ void Robot::Draw()
 {
 	glPointSize(3.0);
 
-	GLfloat whiteColor[] = { 1.0, 1.0, 1.0 };
-	//glColor3f(0.0, 0.0, 1.0);
+	GLfloat whiteColor[] = { 0.5, 0.5, 0.5 };
+	//glColor3d(0.0, 0.0, 1.0);
 	glMaterialfv(GL_FRONT, GL_AMBIENT, whiteColor);
 	glMaterialfv(GL_FRONT, GL_DIFFUSE, whiteColor);
 	glMaterialfv(GL_FRONT, GL_SPECULAR, whiteColor);

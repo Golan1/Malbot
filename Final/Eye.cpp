@@ -37,7 +37,7 @@ void Eye::setDirection(GLdouble vtheta, GLdouble vphi)
 	direction.normalize();
 }
 
-void Eye::setLocation(Vector3d robotLocation)
+void Eye::setLocation(Vector3f robotLocation)
 {
 	switch (viewMode)
 	{
@@ -55,7 +55,7 @@ void Eye::setLocation(Vector3d robotLocation)
 
 void Eye::activate()
 {
-	Vector3d ref = location + direction;
+	Vector3f ref = location + direction;
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
