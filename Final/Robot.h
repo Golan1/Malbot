@@ -1,6 +1,7 @@
 #pragma once
 #include "Arm.h"
 #include "Head.h"
+#include "Material.h"
 
 #define MOVE_SPEED 0.3f
 #define TWIST_SPEED 5.0f
@@ -23,6 +24,8 @@ public:
 
 	void CalcMovement();
 
+	float GetMiddleHeadLocation();
+
 	Vector3f location;
 	Head* head;
 
@@ -33,5 +36,7 @@ private:
 
 	GLfloat robotAngle = 0.0;
 	Vector3f direction;
+
+	Material* material;
 };
 

@@ -7,11 +7,11 @@
 #include "Floor.h"
 
 #define FLOOR_SIZE 200
-
+#define FPS 60
 GLint winWidth = 600, winHeight = 600;
 
-GLfloat dnear = 0.001, dfar = 1000.0;
-GLfloat viewAngle = 50.0;
+GLfloat dnear = 0.001f, dfar = 1000.0f;
+GLfloat viewAngle = 50.0f;
 
 GLfloat vtheta, vphi;
 
@@ -21,66 +21,69 @@ Robot* robot;
 Eye* eye;
 Floor* floorSurface;
 
-GLfloat light1pt[] = { 0.0, 0.1, 0.0, 1.0 };
+Vector4f light1pt = { 0.0f, 5.0f, 0.0f, 1.0f };
 
 void drawAxes(GLfloat lineLength) {
 
-	glColor3d(0.0, 1.0, 0.0);
+	glColor3f(0.0f, 1.0f, 0.0f);
 
-	glBegin(GL_LINES);
-	glVertex3d(0.0, 0.0, 0.0);
-	glVertex3d(0.0, lineLength, 0.0);
-	glVertex3d(0.0, 0.0, 0.0);
-	glVertex3d(lineLength, 0.0, 0.0);
-	glVertex3d(0.0, 0.0, 0.0);
-	glVertex3d(0.0, 0.0, lineLength);
-	glEnd();
+	(Vector3f::X_Axis * lineLength).drawLine();
+	(Vector3f::Y_Axis * lineLength).drawLine();
+	(Vector3f::Z_Axis * lineLength).drawLine();
 
-	glColor3d(1.0, 0.0, 0.0);
+	glColor3f(1.0f, 0.0f, 0.0f);
 
-	glBegin(GL_LINES);
-	glVertex3d(0.0, 0.0, 0.0);
-	glVertex3d(0.0, -lineLength, 0.0);
-	glVertex3d(0.0, 0.0, 0.0);
-	glVertex3d(-lineLength, 0.0, 0.0);
-	glVertex3d(0.0, 0.0, 0.0);
-	glVertex3d(0.0, 0.0, -lineLength);
-	glEnd();
+	(Vector3f::X_Axis * -lineLength).drawLine();
+	(Vector3f::Y_Axis * -lineLength).drawLine();
+	(Vector3f::Z_Axis * -lineLength).drawLine();
 
-	glColor3d(0.0, 0.0, 0.0);
+	glColor3f(0.0f, 0.0f, 0.0f);
 
-	Utils::print(10, 0, 0, "x", GLUT_BITMAP_TIMES_ROMAN_24);
+	Utils::print(FLOOR_SIZE + 1, 0, 0, "x", GLUT_BITMAP_TIMES_ROMAN_24);
 	Utils::print(0, 10, 0, "y", GLUT_BITMAP_TIMES_ROMAN_24);
-	Utils::print(0, 0, 10, "z", GLUT_BITMAP_TIMES_ROMAN_24);
+	Utils::print(0, 0, FLOOR_SIZE + 1, "z", GLUT_BITMAP_TIMES_ROMAN_24);
 }
 
 void myDisplay()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+
 	eye->activate();
-	
 
-	GLfloat whiteColor[] = { 1.0, 1.0, 1.0, 0.0 };
+	Vector4f white = { 1.0f, 1.0f, 1.0f, 1.0f };
+	Vector4f black = { 0.0f, 0.0f, 0.0f, 1.0f };
 
-	glLightfv(GL_LIGHT1, GL_POSITION, light1pt);
+	//Vector4f ambient = { 0.2f, 0.2f, 0.2f, 1.0f };
 
-	glLightfv(GL_LIGHT1, GL_AMBIENT, whiteColor);
-	glLightfv(GL_LIGHT1, GL_DIFFUSE, whiteColor);
-	glLightfv(GL_LIGHT1, GL_SPECULAR, whiteColor);
+	glLightfv(GL_LIGHT0, GL_POSITION, light1pt.vec);
 
-	glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 1);
-	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.5);
-	glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2);
+	glLightfv(GL_LIGHT0, GL_AMBIENT, white.vec);
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, white.vec);
+	glLightfv(GL_LIGHT0, GL_SPECULAR, white.vec);
 
-	glEnable(GL_LIGHT1);
-	
-	GLfloat globalAmbient[] = { 1.0, 1.0, 1.0, 1.0 };
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbient);
+	//glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1);
+	//glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.5);
+	//glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.2);
+
+	Vector3f dir = { 0.0f, -1.0f, 0.0f };
+	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, dir.vec);
+	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, 50.0f);
+	glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 2.0f);
+
+	glEnable(GL_LIGHT0);
+
+	Vector4f globalAmbient = { 1.0f, 1.0f, 1.0f, 1.0f };
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, globalAmbient.vec);
 
 
-	//drawFloor();
+	drawAxes(10000.0);
 
-	//drawAxes(10000.0);
+	glBegin(GL_POINTS);
+	glVertex3fv(light1pt.vec);
+	glEnd();
 
 	robot->Draw();
 
@@ -88,6 +91,11 @@ void myDisplay()
 
 	// For some reason this crashes my computer:
 	//glutSwapBuffers();
+
+	GLenum err = glGetError();
+	if (err != GL_NO_ERROR) {
+		printf("\%d", err);
+	}
 
 	glFlush();
 }
@@ -160,7 +168,7 @@ void myKeyboard(unsigned char key, int x, int y)
 		break;
 	case 'z':
 	case 'Z':
-		light1pt[1]+= 0.1;
+		light1pt[1] += 0.1;
 		break;
 	default:
 		break;
@@ -177,11 +185,17 @@ void myKeyboardUp(unsigned char key, int x, int y) {
 }
 
 void calcChanges() {
-	robot->head->setDirection(vtheta, vphi);
-	robot->CalcMovement();
+
+	if (eye->getViewMode() != ViewMode::fly) {
+		robot->head->setDirection(vtheta, vphi);
+		robot->CalcMovement();
+	}
 
 	eye->setDirection(vtheta, vphi);
-	eye->setLocation(robot->location);
+
+	Vector3f middleHead = { 0.0f, robot->GetMiddleHeadLocation(), 0.0f };
+
+	eye->setLocation(middleHead + robot->location);
 }
 
 void myTimer(int interval) {
@@ -252,6 +266,9 @@ void init()
 
 	glutSetOption(GLUT_MULTISAMPLE, 8);
 
+	glEnable(GL_NORMALIZE);
+
+	//glShadeModel(GL_FLAT);
 	//glEnable(GL_COLOR_MATERIAL);
 }
 
@@ -261,12 +278,12 @@ int main(int argc, char** argv)
 
 	glutInit(&argc, argv);
 	//glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH| GLUT_MULTISAMPLE);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
 	windowId = glutCreateWindow("WOW!");
 
 	init();
 	registerCallbacks();
-	myTimer(16);
+	myTimer(FPS);
 	glutMainLoop();
 
 	return 0;

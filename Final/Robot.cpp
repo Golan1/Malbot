@@ -3,10 +3,14 @@
 
 Robot::Robot()
 {
-	head = new Head({ 1.0, 1.0, 1.0 });
-	body = new Rect({ 2.0, 1.0, 1.0 });
+	head = new Head({ 0.5f, 0.5f, 0.5f });
+	body = new Rect({ 1.0f, 0.5f, 0.5f });
 	leftArm = new Arm();
 	rightArm = new  Arm();
+
+	Vector4f base = { 1.0f, 1.0f, 2.0f, 1.0f };
+
+	material = new Material(0.2f * base, 0.5f * base, 0.6 * base, 100.f);
 }
 
 
@@ -16,6 +20,7 @@ Robot::~Robot()
 	delete body;
 	delete leftArm;
 	delete rightArm;
+	delete material;
 }
 
 void Robot::Init()
@@ -25,38 +30,42 @@ void Robot::Init()
 	leftArm->Init();
 	rightArm->Init();
 
-	location = { 0.0, head->size[1] / 2 + body->size[1], 0.0 };
-	direction = { 0.0, 0.0, 1.0 };
+	location = { 0.0f, 0.0f, 0.0f };
+	direction = { 0.0f, 0.0f, 1.0f };
 }
+
+
+//void Robot::Draw()
+//{
+//	material->Set();
+//
+//	// draw left arm
+//	glPushMatrix();
+//	{
+//		leftArm->Draw();
+//	}
+//	glPopMatrix();
+//}
+
 
 void Robot::Draw()
 {
-
-	glPointSize(3.0);
-
-	Vector3f whiteColor = { 0.5, 0.5, 0.5 };
-	//glColor3d(0.0, 0.0, 1.0);
-	glMaterialfv(GL_FRONT, GL_AMBIENT, whiteColor.vec);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, whiteColor.vec);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, whiteColor.vec);
-
-
-	glBegin(GL_POINTS);
-	glVertex3fv(location.vec);
-	glEnd();
+	material->Set();
 
 	glPushMatrix();
 	{
 		// move the robot to its location
-		glTranslatef(location[0], location[1] - head->size[1] / 2, location[2]);
-
-		head->Draw();
+		Utils::glTranslatefv(location.vec);
 
 		glPushMatrix();
 		{
-			// move the reference point to the middle of the body
-			glTranslatef(0, -body->size[1], 0);
+			glTranslatef(0, body->size[1], 0);
+			head->Draw();
+		}
+		glPopMatrix();
 
+		glPushMatrix();
+		{
 			// rotate the body accordin to the user's wish
 			glRotatef(robotAngle, 0, -1, 0);
 
@@ -71,6 +80,7 @@ void Robot::Draw()
 			{
 				// move to the side of the body
 				glTranslatef((body->size[0] + ARM_THICKNESS) / 2, 0, 0);
+
 				leftArm->Draw();
 			}
 			glPopMatrix();
@@ -78,7 +88,9 @@ void Robot::Draw()
 			// draw right arm using reflection
 			glPushMatrix();
 			{
+				// reflect to the other side
 				glScalef(-1, 1, 1);
+
 				// move to the side of the body
 				glTranslatef((body->size[0] + ARM_THICKNESS) / 2, 0, 0);
 				rightArm->Draw();
@@ -186,3 +198,7 @@ void Robot::CalcMovement()
 	location += moveDirection * MOVE_SPEED * direction;
 }
 
+GLfloat Robot::GetMiddleHeadLocation()
+{
+	return 0.75f;
+}
