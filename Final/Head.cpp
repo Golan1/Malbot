@@ -4,7 +4,7 @@
 
 Head::Head(Vector3f size) : Rect(size, false)
 {
-	antena = new Sphere(0.1);
+	antena = new Sphere(0.05);
 }
 
 

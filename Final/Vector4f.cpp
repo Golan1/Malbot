@@ -92,7 +92,7 @@ Vector4f& Vector4f::operator*=(GLfloat s)
 	vec[0] *= s;
 	vec[1] *= s;
 	vec[2] *= s;
-	vec[3] *= s;
+	//vec[3] *= s;
 	return *this;
 }
 
@@ -102,7 +102,7 @@ Vector4f& Vector4f::operator/=(GLfloat s)
 	vec[0] /= s;
 	vec[1] /= s;
 	vec[2] /= s;
-	vec[3] /= s;
+	//vec[3] /= s;
 	return *this;
 }
 
@@ -123,13 +123,15 @@ Vector4f Vector4f::operator-(const Vector4f& v) const
 
 Vector4f Vector4f::operator*(GLfloat s) const
 {
-	return Vector4f(vec[0] * s, vec[1] * s, vec[2] * s, vec[3] * s);
+	//return Vector4f(vec[0] * s, vec[1] * s, vec[2] * s, vec[3] * s);
+	return Vector4f(vec[0] * s, vec[1] * s, vec[2] * s, vec[3]);
 }
 
 
 Vector4f Vector4f::operator/(GLfloat s) const
 {
-	return Vector4f(vec[0] / s, vec[1] / s, vec[2] / s, vec[3] / s);
+	//return Vector4f(vec[0] / s, vec[1] / s, vec[2] / s, vec[3] / s);
+	return Vector4f(vec[0] / s, vec[1] / s, vec[2] / s, vec[3]);
 }
 
 

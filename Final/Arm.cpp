@@ -43,6 +43,8 @@ void Arm::ControlLowerArm(int direction)
 
 void Arm::Draw()
 {
+	// arm is too big
+	glScalef(0.5f, 0.5f, 0.5f);
 	
 	// rotateShoulder
 	glRotatef(shoulderAngle, -1, 0, 0);

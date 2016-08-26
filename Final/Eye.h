@@ -1,10 +1,10 @@
 #pragma once
 #include "Utils.h"
 
-#define thirdPersonHeightDiff 3.0f
-#define thirdPersonBehindDiff -10.0f
+#define thirdPersonHeightDiff 1.5f
+#define thirdPersonBehindDiff -5.0f
 
-enum class ViewMode { firstPerson, thirdPerson };
+enum class ViewMode { firstPerson, thirdPerson, fly };
 
 class Eye
 {
@@ -19,6 +19,8 @@ public:
 
 	Vector3f location;
 	Vector3f direction;
+
+	inline ViewMode getViewMode(){ return viewMode; }
 
 private:
 	ViewMode viewMode;

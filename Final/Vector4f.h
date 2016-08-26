@@ -44,3 +44,5 @@ public:
 	static const Vector4f Zero;
 private:
 };
+
+inline Vector4f operator* (GLfloat s, const Vector4f& v) { return v*s; }

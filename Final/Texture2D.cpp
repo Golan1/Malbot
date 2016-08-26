@@ -23,6 +23,7 @@ Texture2D::~Texture2D()
 
 void Texture2D::Init()
 {
+
 	GLsizei xdim2, ydim2;
 	void *imgp;
 
@@ -53,6 +54,7 @@ void Texture2D::Init()
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glBindTexture(GL_TEXTURE_2D, 0);
+
 }
 
 void Texture2D::Enable()
