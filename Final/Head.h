@@ -2,7 +2,7 @@
 #include "Rect.h"
 #include "Sphere.h"
 
-#define HEAD_MAX_LOOKING_ANGLE 30
+#define HEAD_MAX_LOOKING_ANGLE 0
 
 class Head :
 	public Rect
@@ -14,7 +14,7 @@ public:
 	void Init();
 	void Draw();
 
-	void setDirection(GLfloat t, GLfloat p);
+	void SetDirection(GLfloat t, GLfloat p);
 
 private:
 	GLfloat theta = 0;

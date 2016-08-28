@@ -1,7 +1,5 @@
 #include "Eye.h"
 
-
-
 Eye::Eye()
 {
 	viewMode = ViewMode::thirdPerson;
@@ -30,17 +28,17 @@ void Eye::ToggleViewMode()
 	}
 }
 
-void Eye::setDirection(GLfloat vtheta, GLfloat vphi)
+void Eye::SetDirection(GLfloat vtheta, GLfloat vphi)
 {
 	GLfloat p = Utils::degToRad(vphi);
 	GLfloat t = Utils::degToRad(vtheta);
 
-	direction = { sinf(p), cosf(t), cosf(p) };
+	direction = {sinf(p) * sinf(t), cosf(t), cosf(p) * sinf(t) };
 
 	direction.normalize();
 }
 
-void Eye::setLocation(Vector3f robotLocation)
+void Eye::SetLocation(Vector3f robotLocation)
 {
 	switch (viewMode)
 	{
@@ -51,8 +49,8 @@ void Eye::setLocation(Vector3f robotLocation)
 	}
 	case ViewMode::thirdPerson:
 	{
-		location = { thirdPersonBehindDiff * direction[0], thirdPersonHeightDiff, thirdPersonBehindDiff * direction[2] };
-		location += robotLocation;
+		location = robotLocation - direction * BEHIND_ROBOT_LENGTH;
+		if (location[1] < 0.1) location[1] = 0.1;
 		break;
 	}
 	case ViewMode::fly:
@@ -73,9 +71,14 @@ void Eye::setLocation(Vector3f robotLocation)
 	}
 }
 
-void Eye::activate()
+void Eye::Activate()
 {
 	Vector3f ref = location + direction;
 
 	gluLookAt(location[0], location[1], location[2], ref[0], ref[1], ref[2], 0.0, 1.0, 0.0);
+}
+
+Vector3f Eye::GetDirection()
+{
+	return direction;
 }

@@ -113,6 +113,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationStep.cpp" />
     <ClCompile Include="Arm.cpp" />
     <ClCompile Include="Body.cpp" />
     <ClCompile Include="Drawable.cpp" />
@@ -120,6 +122,7 @@
     <ClCompile Include="Floor.cpp" />
     <ClCompile Include="Hand.cpp" />
     <ClCompile Include="Head.cpp" />
+    <ClCompile Include="Light.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="Rect.cpp" />
@@ -131,6 +134,8 @@
     <ClCompile Include="Vector4f.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationStep.h" />
     <ClInclude Include="Arm.h" />
     <ClInclude Include="Body.h" />
     <ClInclude Include="Drawable.h" />
@@ -138,6 +143,7 @@
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Hand.h" />
     <ClInclude Include="Head.h" />
+    <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Rect.h" />
     <ClInclude Include="Robot.h" />

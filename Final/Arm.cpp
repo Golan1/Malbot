@@ -29,22 +29,38 @@ void Arm::ControlFist(int direction)
 	hand->ControlFist(direction);
 }
 
+void Arm::SetFist(GLfloat fistAngle)
+{
+	hand->SetFist(fistAngle);
+}
+
 void Arm::ControlUpperArm(int direction)
 {
 	shoulderAngle += direction * SHOULDER_SPEED;
 }
 
+void Arm::SetUpperArm(GLfloat angle)
+{
+	shoulderAngle = angle;
+}
+
 void Arm::ControlLowerArm(int direction)
 {
 	elbowAngle += direction * ELBOW_SPEED;
+	SetLowerArm(elbowAngle);
+}
+
+void Arm::SetLowerArm(GLfloat angle)
+{
 	if (elbowAngle < 0) elbowAngle = 0;
-	if (elbowAngle > MAX_ELBOW_ANGLE) elbowAngle = MAX_ELBOW_ANGLE;
+	else if (elbowAngle > MAX_ELBOW_ANGLE) elbowAngle = MAX_ELBOW_ANGLE;
+	else elbowAngle = angle;
 }
 
 void Arm::Draw()
 {
 	// arm is too big
-	glScalef(0.5f, 0.5f, 0.5f);
+	glScalef(0.25f, 0.25f, 0.25f);
 	
 	// rotateShoulder
 	glRotatef(shoulderAngle, -1, 0, 0);

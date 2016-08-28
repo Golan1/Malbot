@@ -3,14 +3,14 @@
 
 Robot::Robot()
 {
-	head = new Head({ 0.5f, 0.5f, 0.5f });
-	body = new Rect({ 1.0f, 0.5f, 0.5f });
+	head = new Head({ 0.25f, 0.25f, 0.25f });
+	body = new Rect({ 0.5f, 0.25f, 0.25f });
 	leftArm = new Arm();
 	rightArm = new  Arm();
 
 	Vector4f base = { 1.0f, 1.0f, 2.0f, 1.0f };
 
-	material = new Material(0.2f * base, 0.5f * base, 0.6 * base, 100.f);
+	material = new Material(0.2f * base, 0.5f * base, 0.3f * base, 100.f);
 }
 
 
@@ -33,20 +33,6 @@ void Robot::Init()
 	location = { 0.0f, 0.0f, 0.0f };
 	direction = { 0.0f, 0.0f, 1.0f };
 }
-
-
-//void Robot::Draw()
-//{
-//	material->Set();
-//
-//	// draw left arm
-//	glPushMatrix();
-//	{
-//		leftArm->Draw();
-//	}
-//	glPopMatrix();
-//}
-
 
 void Robot::Draw()
 {
@@ -79,7 +65,7 @@ void Robot::Draw()
 			glPushMatrix();
 			{
 				// move to the side of the body
-				glTranslatef((body->size[0] + ARM_THICKNESS) / 2, 0, 0);
+				glTranslatef((body->size[0] + ARM_THICKNESS / 4) / 2, 0, 0);
 
 				leftArm->Draw();
 			}
@@ -92,7 +78,7 @@ void Robot::Draw()
 				glScalef(-1, 1, 1);
 
 				// move to the side of the body
-				glTranslatef((body->size[0] + ARM_THICKNESS) / 2, 0, 0);
+				glTranslatef((body->size[0] + ARM_THICKNESS / 4) / 2, 0, 0);
 				rightArm->Draw();
 			}
 			glPopMatrix();
@@ -137,6 +123,23 @@ void Robot::ControlUpperArm(int direction, Side side)
 	}
 }
 
+void Robot::SetUpperArm(GLfloat shoulderAngle, Side side)
+{
+	switch (side)
+	{
+	case Side::Right:
+		rightArm->SetUpperArm(shoulderAngle);
+		break;
+	case Side::Left:
+		leftArm->SetUpperArm(shoulderAngle);
+		break;
+	default:
+		leftArm->SetUpperArm(shoulderAngle);
+		rightArm->SetUpperArm(shoulderAngle);
+		break;
+	}
+}
+
 void Robot::ControlLowerArm(int direction, Side side)
 {
 	switch (side)
@@ -150,6 +153,23 @@ void Robot::ControlLowerArm(int direction, Side side)
 	default:
 		leftArm->ControlLowerArm(direction);
 		rightArm->ControlLowerArm(direction);
+		break;
+	}
+}
+
+void Robot::SetLowerArm(GLfloat elbowAngle, Side side)
+{
+	switch (side)
+	{
+	case Side::Right:
+		rightArm->SetLowerArm(elbowAngle);
+		break;
+	case Side::Left:
+		leftArm->SetLowerArm(elbowAngle);
+		break;
+	default:
+		leftArm->SetLowerArm(elbowAngle);
+		rightArm->SetLowerArm(elbowAngle);
 		break;
 	}
 }
@@ -169,6 +189,28 @@ void Robot::ControlFist(int direction, Side side)
 		rightArm->ControlFist(direction);
 		break;
 	}
+}
+
+void Robot::SetFist(GLfloat fistAngle, Side side)
+{
+	switch (side)
+	{
+	case Side::Right:
+		rightArm->SetFist(fistAngle);
+		break;
+	case Side::Left:
+		leftArm->SetFist(fistAngle);
+		break;
+	default:
+		leftArm->SetFist(fistAngle);
+		rightArm->SetFist(fistAngle);
+		break;
+	}
+}
+
+void Robot::SetHeadDirection(GLfloat t, GLfloat p)
+{
+	head->SetDirection(t, p);
 }
 
 void Robot::CalcMovement()
@@ -198,7 +240,16 @@ void Robot::CalcMovement()
 	location += moveDirection * MOVE_SPEED * direction;
 }
 
+void Robot::MoveForward() {
+	location += MOVE_SPEED * direction;
+}
+
+Vector3f Robot::GetLocation()
+{
+	return location;
+}
+
 GLfloat Robot::GetMiddleHeadLocation()
 {
-	return 0.75f;
+	return 0.375f;
 }

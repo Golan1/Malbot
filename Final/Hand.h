@@ -16,6 +16,7 @@ public:
 	void Draw();
 
 	void ControlFist(int direction);
+	void SetFist(GLfloat fistAngle);
 private:
 
 	Rect* phalanx;

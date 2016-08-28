@@ -4,7 +4,7 @@
 
 Head::Head(Vector3f size) : Rect(size, false)
 {
-	antena = new Sphere(0.05);
+	antena = new Sphere(0.025);
 }
 
 
@@ -52,7 +52,7 @@ void Head::Draw()
 	glPopMatrix();
 }
 
-void Head::setDirection(GLfloat t, GLfloat p)
+void Head::SetDirection(GLfloat t, GLfloat p)
 {
 	theta = t;
 	phi = p;

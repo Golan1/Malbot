@@ -62,6 +62,11 @@ void Hand::drawPhalanxRow(bool isFirstRow) {
 
 void Hand::ControlFist(int direction) {
 	fistAngle -= direction;
-	if (fistAngle < 0) fistAngle = 0;
-	if (fistAngle > MAX_FIST_ANGLE) fistAngle = MAX_FIST_ANGLE;
+	SetFist(fistAngle);
+}
+
+void Hand::SetFist(GLfloat angle) {
+	if (angle < 0) fistAngle = 0;
+	else if (angle > MAX_FIST_ANGLE) fistAngle = MAX_FIST_ANGLE;
+	else fistAngle = angle;
 }
