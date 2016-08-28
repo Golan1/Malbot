@@ -7,6 +7,8 @@
 #define PI 3.14159265358979323846
 #endif
 
+#define FPS 60
+
 class Utils
 {
 public:
