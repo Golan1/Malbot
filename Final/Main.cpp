@@ -20,7 +20,6 @@ Robot* robot;
 Eye* eye;
 Floor* floorSurface;
 Light* light;
-
 AnimationManager* animationManager;
 
 void drawAxes(GLfloat lineLength) {
@@ -206,15 +205,8 @@ void generateModels() {
 	floorSurface->Init();
 
 	light = new Light({ 0.0f, 15.0f, 0.0f, 1.0f }, { 0.0f, -0.1f, 0.0f });
-}
 
-void registerCallbacks() {
-	glutDisplayFunc(myDisplay);
-	glutMouseFunc(myMouse);
-	glutReshapeFunc(myReshape);
-	glutPassiveMotionFunc(myPassiveMotion);
-	glutKeyboardFunc(myKeyboard);
-	glutKeyboardUpFunc(myKeyboardUp);
+	animationManager = new AnimationManager(robot);
 }
 
 void init()
@@ -238,8 +230,15 @@ void init()
 	glEnable(GL_LIGHTING);
 
 	glEnable(GL_NORMALIZE);
+}
 
-	animationManager = new AnimationManager(robot);
+void registerCallbacks() {
+	glutDisplayFunc(myDisplay);
+	glutMouseFunc(myMouse);
+	glutReshapeFunc(myReshape);
+	glutPassiveMotionFunc(myPassiveMotion);
+	glutKeyboardFunc(myKeyboard);
+	glutKeyboardUpFunc(myKeyboardUp);
 }
 
 int main(int argc, char** argv)
