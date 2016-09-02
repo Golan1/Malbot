@@ -5,12 +5,17 @@
 #include "Floor.h"
 #include "Light.h"
 #include "AnimationManager.h"
+#include <string>
+
+// MALBOT = Malben + Robot
 
 #define FLOOR_SIZE 200
+#define SIZE_2D 5000
+#define AMBIENT_SCALE 100
 
 GLint winWidth, winHeight;
 
-GLfloat dnear = 0.001f, dfar = 1000.0f;
+GLfloat dnear = 0.1f, dfar = 300.0f;
 GLfloat viewAngle = 50.0f;
 
 GLfloat vtheta, vphi;
@@ -21,6 +26,12 @@ Eye* eye;
 Floor* floorSurface;
 Light* light;
 AnimationManager* animationManager;
+
+Texture2D* instructionsTexture;
+Material* _instructionsMaterial;
+
+bool isAskingUserForInput = false;
+int userInput = 100;
 
 void drawAxes(GLfloat lineLength) {
 
@@ -43,22 +54,126 @@ void drawAxes(GLfloat lineLength) {
 	Utils::print(0, 0, FLOOR_SIZE + 1, "z", GLUT_BITMAP_TIMES_ROMAN_24);
 }
 
+void drawTorus() {
+	Material::RedRubber.Set();
+
+	glPushMatrix();
+	glTranslatef(5.0f, 1.5f, 10.0f);
+	glutSolidTorus(0.5, 1.0, 100, 100);
+	glPopMatrix();
+}
+
+void drawTeapot() {
+	Material::Brass.Set();
+	glPushMatrix();
+	glTranslatef(0.0f, 0.5f, 10.0f);
+	glutSolidTeapot(1.0);
+	glPopMatrix();
+}
+
+void drawTetrahedron() {
+	Material::Emerald.Set();
+
+	glPushMatrix();
+	glTranslatef(-5.0f, 0.0f, 10.0f);
+	glRotatef(90.0f, 0.0f, 0.0f, 1.0f);
+	glScalef(2.0f, 2.0f, 2.0f);
+	glutSolidTetrahedron();
+	glPopMatrix();
+}
+
+void drawInstructions() {
+	_instructionsMaterial->Set();
+
+	instructionsTexture->Enable();
+
+	glPushMatrix();
+	{
+		glTranslatef(0.0f, 0.0f, 15.0f);
+		glBegin(GL_QUADS);
+		glNormal3fv((-1 * Vector3f::Z_Axis).vec);
+		glTexCoord2f(0.0f, 0.0f);
+		glVertex3f(5.0f, 10.0f, 0.0f);
+		glTexCoord2f(0.0f, 1.0f);
+		glVertex3f(5.0f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 1.0f);
+		glVertex3f(-5.0f, 0.0f, 0.0f);
+		glTexCoord2f(1.0f, 0.0f);
+		glVertex3f(-5.0f, 10.0f, 0.0f);
+		glEnd();
+	}
+	glPopMatrix();
+
+	instructionsTexture->Disable();
+}
+
+void output(GLfloat x, GLfloat y, char *format, ...)
+{
+	va_list args;
+	char buffer[200], *p;
+
+	va_start(args, format);
+	vsprintf_s(buffer, format, args);
+	va_end(args);
+	glPushMatrix();
+	glTranslatef(x, y, 0);
+	for (p = buffer; *p; p++)
+		glutStrokeCharacter(GLUT_STROKE_ROMAN, *p);
+	glPopMatrix();
+}
+
+void drawTexts() {
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0, SIZE_2D, 0, SIZE_2D);
+
+	glMatrixMode(GL_MODELVIEW);
+
+	glEnable(GL_COLOR_MATERIAL);
+	glColor3fv(Light::WhiteColor.vec);
+
+	output(SIZE_2D - 750, 50, "Golan Levi");
+	output(50, 50, "Project MALBOT");
+
+	if (!isAskingUserForInput){
+		glColor3f(0.0f, 1.0f, 0.0f);
+		output(50, SIZE_2D - 150, "Global Ambient Attenuation: %d", userInput);
+	}
+	else {
+		glColor3f(1.0f, 0.0f, 0.0f);
+		output(50, SIZE_2D - 150, "Enter value for global ambient attenuation (0-100): %d", userInput);
+	}
+
+	glDisable(GL_COLOR_MATERIAL);
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+}
+
 void myDisplay()
 {
+
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 
+	glPushMatrix();
 	eye->Activate();
 
 	//drawAxes(10000.0);
-
 	robot->Draw();
-
 	floorSurface->Draw();
+	drawTorus();
+	drawTeapot();
+	drawTetrahedron();
+	drawInstructions();
 
 	light->Activate();
+
+	glPopMatrix();
+
+	drawTexts();
 
 	// For some reason this crashes my computer
 	//glutSwapBuffers();
@@ -91,10 +206,11 @@ void myPassiveMotion(int x, int y) {
 }
 
 void setProjection() {
+	glViewport(0, 0, winWidth, winHeight);
+
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	gluPerspective(viewAngle, (GLfloat)winWidth / (GLfloat)winHeight, dnear, dfar);
-	glMatrixMode(GL_MODELVIEW);
 }
 
 void myReshape(int width, int height)
@@ -102,7 +218,6 @@ void myReshape(int width, int height)
 	winWidth = width;
 	winHeight = height;
 
-	glViewport(0, 0, winWidth, winHeight);
 	setProjection();
 }
 
@@ -115,25 +230,34 @@ void myKeyboard(unsigned char key, int x, int y)
 		Utils::keys[key - 97] = 1;
 	}
 
-	if (key >= 48 && key <= 57) {
-		animationManager->StartAnimate(key - 48);
-	}
-
 	switch (key)
 	{
-	case 27:
+	case 27: //Escape
 		exit(0);
+		break;
+	case 13: //Enter
+		if (isAskingUserForInput) {
+			userInput = light->SetGlobalAmbientLight((float)userInput / AMBIENT_SCALE) * AMBIENT_SCALE;
+			isAskingUserForInput = false;
+		}
 		break;
 	case 'x':
 	case 'X':
-		eye->ToggleViewMode();
-		break;
-	case 'z':
-	case 'Z':
-		//light1pt[1] += 0.1;
+		eye->SwitchViewMode();
 		break;
 	default:
 		break;
+	}
+
+	if (key >= 48 && key <= 57) {
+		int digit = key - 48;
+
+		if (isAskingUserForInput) {
+			userInput *= 10;
+			userInput += digit;
+		}
+		else
+			animationManager->StartAnimate(digit);
 	}
 }
 
@@ -147,22 +271,35 @@ void myKeyboardUp(unsigned char key, int x, int y) {
 }
 
 void calcChanges() {
-
-	if (eye->getViewMode() != ViewMode::fly) {
-		robot->SetHeadDirection(vtheta, vphi);
-		robot->CalcMovement();
-	}
+	animationManager->Animate();
 
 	eye->SetDirection(vtheta, vphi);
 
-	Vector3f middleHead = { 0.0f, robot->GetMiddleHeadLocation(), 0.0f };
+	switch (eye->getViewMode())
+	{
+	case ViewMode::firstPerson:
+	case ViewMode::thirdPerson:
+	{
+		robot->SetHeadDirection(vtheta, vphi);
+		robot->CalcMovement();
 
-	eye->SetLocation(middleHead + robot->GetLocation());
+		eye->SetLocation(robot->GetLocation());
+		break;
+	}
+	case ViewMode::freeCamera:
+		eye->SetLocation(Vector3f::Zero);
+		break;
+	case ViewMode::light:
+	{
+		light->SetDirection(vtheta, vphi);
+		light->CalcMovement();
 
-	light->SetDirection(eye->GetDirection());
-	light->CalcMovement();
-
-	animationManager->Animate();
+		eye->SetLocation(light->GetLocation());
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void myTimer(int interval) {
@@ -189,10 +326,32 @@ void myMouse(int button, int state, int x, int y)
 		if (Utils::isKeyPressed('r')) {
 			robot->ControlFist(direction, Side::Both);
 		}
+
+		if (Utils::isKeyPressed('t')) {
+			light->ControlAtttenuation(direction);
+		}
+
+		if (Utils::isKeyPressed('f')) {
+			light->ControlFocus(direction);
+		}
 	}
 	//y = winHeight - y - 1;
 }
 
+void resetScene() {
+	vphi = 0.0f;
+
+	POINT cursorPos;
+	GetCursorPos(&cursorPos);
+	glutWarpPointer(cursorPos.x, glutGet(GLUT_WINDOW_HEIGHT) * 9.0f / 24.0f);
+	startX = cursorPos.x;
+
+	myPassiveMotion(cursorPos.x, glutGet(GLUT_WINDOW_HEIGHT) * 9.0f / 24.0f);
+
+	robot->Reset();
+	light->Reset();
+	eye->SetViewMode(ViewMode::firstPerson);
+}
 
 void generateModels() {
 
@@ -204,32 +363,41 @@ void generateModels() {
 	floorSurface = new Floor(FLOOR_SIZE);
 	floorSurface->Init();
 
-	light = new Light({ 0.0f, 15.0f, 0.0f, 1.0f }, { 0.0f, -0.1f, 0.0f });
+	light = new Light();
 
 	animationManager = new AnimationManager(robot);
+
+	instructionsTexture = new Texture2D("Textures\\instructions.jpg");
+	instructionsTexture->Init();
+
+	_instructionsMaterial = new Material(Light::WhiteColor, 0.2f, 1.0f, 0.5f, 50.0f);
+	//_teapotMaterial = new Material(Light::WhiteColor, 0.1f, 0.5f, 1.0f, 50.0f);
 }
 
 void init()
 {
 	generateModels();
 
-	POINT cursorPos;
-	GetCursorPos(&cursorPos);
-	startX = cursorPos.x;
-
-	glutSetCursor(GLUT_CURSOR_NONE);
-
 	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 
-	glutFullScreen();
+	glEnable(GL_LIGHTING);
+	glShadeModel(GL_SMOOTH);
 
-	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_NORMALIZE);
+
+	glEnable(GL_FOG);
+	glFogi(GL_FOG_MODE, GL_EXP2);
+	glFogf(GL_FOG_DENSITY, 0.02f);
 
 	glutSetOption(GLUT_MULTISAMPLE, 8);
 
-	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
 
-	glEnable(GL_NORMALIZE);
+	glutFullScreen();
+
+	glutSetCursor(GLUT_CURSOR_NONE);
+
+	resetScene();
 }
 
 void registerCallbacks() {
@@ -241,6 +409,43 @@ void registerCallbacks() {
 	glutKeyboardUpFunc(myKeyboardUp);
 }
 
+void mainMenuActions(int value) {
+	switch (value)
+	{
+	case -1:
+		exit(0);
+		break;
+	case 1:
+		userInput = 0;
+		isAskingUserForInput = true;
+		break;
+	case 2:
+		resetScene();
+		break;
+	default:
+		break;
+	}
+}
+
+void viewMenuActions(int value) {
+	eye->SetViewMode((ViewMode)value);
+}
+
+void createMenus() {
+	int viewMain = glutCreateMenu(viewMenuActions);
+	glutAddMenuEntry("First Person", (int)ViewMode::firstPerson);
+	glutAddMenuEntry("Thrid Person", (int)ViewMode::thirdPerson);
+	glutAddMenuEntry("Free Camera", (int)ViewMode::freeCamera);
+	glutAddMenuEntry("Light Position", (int)ViewMode::light);
+
+
+	int main = glutCreateMenu(mainMenuActions);
+	glutAddMenuEntry("Adjusting Global Ambient Light", 1);
+	glutAddSubMenu("View Mode", viewMain);
+	glutAddMenuEntry("Help", 2);
+	glutAddMenuEntry("Exit", -1);
+	glutAttachMenu(GLUT_RIGHT_BUTTON);
+}
 int main(int argc, char** argv)
 {
 	int windowId;
@@ -249,6 +454,7 @@ int main(int argc, char** argv)
 	//glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
 	windowId = glutCreateWindow("WOW!");
+	createMenus();
 
 	init();
 	registerCallbacks();
@@ -257,4 +463,3 @@ int main(int argc, char** argv)
 
 	return 0;
 }
-

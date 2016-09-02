@@ -114,6 +114,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Animation.cpp" />
+    <ClCompile Include="AnimationInit.cpp" />
     <ClCompile Include="AnimationManager.cpp" />
     <ClCompile Include="AnimationStep.cpp" />
     <ClCompile Include="Arm.cpp" />
@@ -133,9 +134,11 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="Vector3f.cpp" />
     <ClCompile Include="Vector4f.cpp" />
+    <ClCompile Include="Wave.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
+    <ClInclude Include="AnimationInit.h" />
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="AnimationStep.h" />
     <ClInclude Include="Arm.h" />
@@ -148,6 +151,7 @@
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Rect.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="stb_image.h" />
@@ -155,9 +159,14 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="Vector3f.h" />
     <ClInclude Include="Vector4f.h" />
+    <ClInclude Include="Wave.h" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="Textures\instructions.jpg" />
     <Image Include="Textures\parquet.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Final.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

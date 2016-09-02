@@ -17,8 +17,8 @@ public:
 	void SetDirection(GLfloat t, GLfloat p);
 
 private:
-	GLfloat theta = 0;
-	GLfloat phi = 0;
+	GLfloat theta;
+	GLfloat phi;
 	Sphere* antena;
 };
 

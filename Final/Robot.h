@@ -6,8 +6,6 @@
 #define MOVE_SPEED 0.1f
 #define TWIST_SPEED 5.0f
 
-enum  class Side { Both , Right, Left };
-
 class Robot : public Drawable
 {
 public:
@@ -15,9 +13,10 @@ public:
 	~Robot();
 
 	void Init();
+	void Reset();
 	void Draw();
 
-	void Twist(Side side);
+	void Twist(GLfloat speed, Side side);
 
 	void ControlUpperArm(int direction, Side side);
 	void SetUpperArm(GLfloat shoulderAngle, Side side);
@@ -34,7 +33,6 @@ public:
 
 	Vector3f GetLocation();
 
-	float GetMiddleHeadLocation();
 
 private:
 	Head* head;
@@ -42,10 +40,11 @@ private:
 	Arm* leftArm;
 	Arm* rightArm;
 
-	GLfloat robotAngle = 0.0;
+	GLfloat robotAngle;
 	Vector3f direction;
 	Vector3f location;
 
-	Material* material;
+	void SetAngle(GLfloat angle);
+	static const Vector3f MiddleOfHead;
 };
 

@@ -36,7 +36,7 @@ void Arm::SetFist(GLfloat fistAngle)
 
 void Arm::ControlUpperArm(int direction)
 {
-	shoulderAngle += direction * SHOULDER_SPEED;
+	shoulderAngle += -1 * direction * SHOULDER_SPEED;
 }
 
 void Arm::SetUpperArm(GLfloat angle)
@@ -63,7 +63,7 @@ void Arm::Draw()
 	glScalef(0.25f, 0.25f, 0.25f);
 	
 	// rotateShoulder
-	glRotatef(shoulderAngle, -1, 0, 0);
+	glRotatef(shoulderAngle, 1, 0, 0);
 
 	upperArm->Draw();
 

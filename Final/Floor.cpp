@@ -1,13 +1,12 @@
 #include "Floor.h"
+#include "Light.h"
 
 Floor::Floor(GLint size)
 {
 	_size = size;
 	_texture = new Texture2D("Textures\\parquet.jpg");
 
-	Vector4f base = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-	_material = new Material(base * 0.2, base, base * 0.5, 50.f);
+	_material = new Material(Light::WhiteColor, 0.2f, 1.0f, 0.7f, 50.0f);
 }
 
 
@@ -36,17 +35,19 @@ void Floor::Init()
 	GLint limit = -_size / 2;
 
 	for (i = 0; i < _size; i += 1)
+	{
 		for (j = 1; j <= _size; j += 1)
 		{
-			glTexCoord2d(0, 0);
-			glVertex3d(limit + i, 0.0, limit + j);
-			glTexCoord2d(1, 0);
-			glVertex3d(limit + i, 0.0, limit + j - 1);
-			glTexCoord2d(1, 1);
-			glVertex3d(limit + i + 1, 0.0, limit + j - 1);
-			glTexCoord2d(0, 1);
-			glVertex3d(limit + i + 1, 0.0, limit + j);
+			glTexCoord2d(0.0f, 0.0f);
+			glVertex3f(limit + i, 0.0f, limit + j);
+			glTexCoord2f(1, 0);
+			glVertex3f(limit + i, 0.0f, limit + j - 1);
+			glTexCoord2f(1.0f, 1.0f);
+			glVertex3f(limit + i + 1, 0.0f, limit + j - 1);
+			glTexCoord2f(0.0f, 1.0f);
+			glVertex3f(limit + i + 1, 0.0f, limit + j);
 		}
+	}
 	glEnd();
 
 	_texture->Disable();

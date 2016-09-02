@@ -2,58 +2,62 @@
 
 Eye::Eye()
 {
-	viewMode = ViewMode::thirdPerson;
+	viewMode = ViewMode::firstPerson;
 }
-
 
 Eye::~Eye()
 {
 }
 
-void Eye::ToggleViewMode()
+void Eye::SwitchViewMode()
 {
 	switch (viewMode)
 	{
 	case ViewMode::firstPerson:
-		viewMode = ViewMode::fly;
+		viewMode = ViewMode::thirdPerson;
 		break;
 	case ViewMode::thirdPerson:
-		viewMode = ViewMode::firstPerson;
+		viewMode = ViewMode::freeCamera;
 		break;
-	case ViewMode::fly:
-		viewMode = ViewMode::thirdPerson;
+	case ViewMode::freeCamera:
+		viewMode = ViewMode::light;
+		break;
+	case ViewMode::light:
+		viewMode = ViewMode::firstPerson;
 		break;
 	default:
 		break;
 	}
 }
 
-void Eye::SetDirection(GLfloat vtheta, GLfloat vphi)
-{
-	GLfloat p = Utils::degToRad(vphi);
-	GLfloat t = Utils::degToRad(vtheta);
-
-	direction = {sinf(p) * sinf(t), cosf(t), cosf(p) * sinf(t) };
-
-	direction.normalize();
+void Eye::SetViewMode(ViewMode v) {
+	viewMode = v;
 }
 
-void Eye::SetLocation(Vector3f robotLocation)
+void Eye::SetDirection(GLfloat theta, GLfloat phi)
+{
+	if (theta < MIN_CAMERA_ANGLE) theta = MIN_CAMERA_ANGLE;
+
+	direction = Utils::getDirectionVector(theta, phi);
+}
+
+void Eye::SetLocation(Vector3f followObjectLocation)
 {
 	switch (viewMode)
 	{
 	case ViewMode::firstPerson:
 	{
-		location = robotLocation;
+		location = followObjectLocation;
 		break;
 	}
 	case ViewMode::thirdPerson:
+	case ViewMode::light:
 	{
-		location = robotLocation - direction * BEHIND_ROBOT_LENGTH;
+		location = followObjectLocation - direction * BEHIND_ROBOT_LENGTH;
 		if (location[1] < 0.1) location[1] = 0.1;
 		break;
 	}
-	case ViewMode::fly:
+	case ViewMode::freeCamera:
 	{
 		int moveDirection = 0;
 
@@ -63,7 +67,10 @@ void Eye::SetLocation(Vector3f robotLocation)
 		else if (Utils::isKeyPressed('s')) {
 			moveDirection = -1;
 		}
-		location += moveDirection * direction;
+		location += moveDirection * direction * FREE_CAMERA_SPEED;
+
+		if (location[1] < 0.1f) location[1] = 0.1f;
+
 		break;
 	}
 	default:
@@ -76,9 +83,4 @@ void Eye::Activate()
 	Vector3f ref = location + direction;
 
 	gluLookAt(location[0], location[1], location[2], ref[0], ref[1], ref[2], 0.0, 1.0, 0.0);
-}
-
-Vector3f Eye::GetDirection()
-{
-	return direction;
 }

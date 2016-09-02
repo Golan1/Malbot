@@ -1,5 +1,6 @@
 #include "Robot.h"
 
+const Vector3f Robot::MiddleOfHead(0.0f, 0.375f, 0.0f);
 
 Robot::Robot()
 {
@@ -7,10 +8,6 @@ Robot::Robot()
 	body = new Rect({ 0.5f, 0.25f, 0.25f });
 	leftArm = new Arm();
 	rightArm = new  Arm();
-
-	Vector4f base = { 1.0f, 1.0f, 2.0f, 1.0f };
-
-	material = new Material(0.2f * base, 0.5f * base, 0.3f * base, 100.f);
 }
 
 
@@ -20,7 +17,6 @@ Robot::~Robot()
 	delete body;
 	delete leftArm;
 	delete rightArm;
-	delete material;
 }
 
 void Robot::Init()
@@ -29,14 +25,17 @@ void Robot::Init()
 	body->Init();
 	leftArm->Init();
 	rightArm->Init();
+}
 
-	location = { 0.0f, 0.0f, 0.0f };
+void Robot::Reset() {
+	location = { 0.0f, 0.0f, 4.0f };
 	direction = { 0.0f, 0.0f, 1.0f };
+	robotAngle = 0.0f;
 }
 
 void Robot::Draw()
 {
-	material->Set();
+	Material::Chrome.Set();
 
 	glPushMatrix();
 	{
@@ -88,7 +87,7 @@ void Robot::Draw()
 	glPopMatrix();
 }
 
-void Robot::Twist(Side side)
+void Robot::Twist(GLfloat speed, Side side)
 {
 	int direction = 0;
 	switch (side)
@@ -103,7 +102,7 @@ void Robot::Twist(Side side)
 		break;
 	}
 
-	robotAngle += direction * TWIST_SPEED;
+	SetAngle(robotAngle + direction * speed);
 }
 
 void Robot::ControlUpperArm(int direction, Side side)
@@ -216,17 +215,11 @@ void Robot::SetHeadDirection(GLfloat t, GLfloat p)
 void Robot::CalcMovement()
 {
 	if (Utils::isKeyPressed('d')) {
-		Twist(Side::Right);
+		Twist(TWIST_SPEED, Side::Right);
 	}
 	else if (Utils::isKeyPressed('a')) {
-		Twist(Side::Left);
+		Twist(TWIST_SPEED, Side::Left);
 	}
-
-	GLfloat a = Utils::degToRad(robotAngle + 90);
-
-	direction = { cosf(a), 0.f, sinf(a) };
-
-	direction.normalize();
 
 	int moveDirection = 0;
 
@@ -246,10 +239,17 @@ void Robot::MoveForward() {
 
 Vector3f Robot::GetLocation()
 {
-	return location;
+	Vector3f loc = location + MiddleOfHead;
+
+	return loc;
 }
 
-GLfloat Robot::GetMiddleHeadLocation()
-{
-	return 0.375f;
+void Robot::SetAngle(GLfloat angle) {
+	robotAngle = angle;
+
+	GLfloat a = Utils::degToRad(robotAngle + 90);
+
+	direction = { cosf(a), 0.0f, sinf(a) };
+
+	direction.normalize();
 }

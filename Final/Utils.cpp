@@ -1,4 +1,5 @@
 #include "Utils.h"
+#include <stdio.h>
 
 char Utils::keys[26];
 
@@ -9,7 +10,6 @@ void Utils::print(GLint x, GLint y, GLint z, char * str, void * font)
 	for (char *i = str; *i; i++)
 	{
 		glutBitmapCharacter(font, *i);
-		//glutStrokeCharacter(GLUT_STROKE_MONO_ROMAN, *i);
 	}
 }
 
@@ -23,4 +23,16 @@ bool Utils::isKeyPressed(char key)
 	}
 
 	return false;
+}
+
+Vector3f Utils::getDirectionVector(GLfloat theta, GLfloat phi)
+{
+	GLfloat p = Utils::degToRad(phi);
+	GLfloat t = Utils::degToRad(theta);
+
+	Vector3f direction = { sinf(p) * sinf(t), cosf(t), cosf(p) * sinf(t) };
+
+	direction.normalize();
+
+	return direction;
 }

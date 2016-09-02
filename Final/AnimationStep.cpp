@@ -11,9 +11,10 @@ AnimationStep::~AnimationStep()
 
 }
 
-void AnimationStep::Execute(msecs currentTime) {
+bool AnimationStep::Execute(msecs currentTime) {
 
-	if (currentTime < startTime || currentTime > endTime) return;
+	if (currentTime < startTime) return false; 
+	else if(currentTime > endTime) return true;
 
 	GLfloat length = endTime - startTime;
 
@@ -33,6 +34,7 @@ void AnimationStep::Execute(msecs currentTime) {
 		robot->SetUpperArm(currentValue, side);
 		break;
 	case AnimationType::Twist:
+		robot->Twist(currentValue, side);
 		break;
 	case AnimationType::Move:
 		robot->MoveForward();
@@ -40,4 +42,6 @@ void AnimationStep::Execute(msecs currentTime) {
 	default:
 		break;
 	}
+
+	return false;
 }

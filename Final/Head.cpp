@@ -4,6 +4,7 @@
 
 Head::Head(Vector3f size) : Rect(size, false)
 {
+	theta = phi = 0.0f;
 	antena = new Sphere(0.025);
 }
 
@@ -24,7 +25,7 @@ void Head::Draw()
 {
 	glPushMatrix();
 
-	// rotate the head accordint to the user's view vector
+	// rotate the head according to the user's view vector
 	glRotatef(phi, 0, 1, 0);
 	glRotatef(90 - theta, -1, 0, 0);
 

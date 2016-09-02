@@ -66,7 +66,7 @@ void Hand::ControlFist(int direction) {
 }
 
 void Hand::SetFist(GLfloat angle) {
-	if (angle < 0) fistAngle = 0;
+	if (angle < 0.0f) fistAngle = 0.0f;
 	else if (angle > MAX_FIST_ANGLE) fistAngle = MAX_FIST_ANGLE;
 	else fistAngle = angle;
 }

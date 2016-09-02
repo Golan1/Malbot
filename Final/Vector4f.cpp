@@ -4,7 +4,6 @@
 
 const Vector4f Vector4f::Zero(0.0, 0.0, 0.0, 0.0);
 
-
 Vector4f::Vector4f(void)
 {
 	set(0, 0, 0, 0);

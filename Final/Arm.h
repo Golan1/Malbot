@@ -31,7 +31,7 @@ private:
 	Sphere* elbow;
 	Hand* hand;
 
-	GLfloat shoulderAngle = -90;
-	GLfloat elbowAngle = 90;
+	GLfloat shoulderAngle = 90.0f;
+	GLfloat elbowAngle = 90.0f;
 };
 
