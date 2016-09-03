@@ -5,7 +5,7 @@
 Head::Head(Vector3f size) : Rect(size, false)
 {
 	theta = phi = 0.0f;
-	antena = new Sphere(0.025);
+	antena = new Sphere(0.025f);
 }
 
 
@@ -29,11 +29,16 @@ void Head::Draw()
 	glRotatef(phi, 0, 1, 0);
 	glRotatef(90 - theta, -1, 0, 0);
 
-	glPushAttrib(GL_LINE_BIT);
-	glLineWidth(2);
+	// Draw antena base
 	glPushMatrix();
 	{
+		// Move to the end of the head
 		glTranslated(0, size[1], 0);
+
+		// Set line width (only for this scope)
+		glPushAttrib(GL_LINE_BIT);
+		glLineWidth(2);
+
 		glBegin(GL_LINES);
 		glVertex3d(0, 0, 0);
 		glVertex3d(0, size[1] / 2, 0);
@@ -41,13 +46,14 @@ void Head::Draw()
 
 		glPopAttrib();
 
+		// Move to the end of the base
 		glTranslated(0, size[1] / 2, 0);
 
 		antena->Draw();
 	}
 	glPopMatrix();
 
-
+	// Draw the head
 	Rect::Draw();
 
 	glPopMatrix();

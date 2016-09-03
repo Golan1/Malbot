@@ -8,6 +8,7 @@ stbi_uc* _image;
 Texture2D::Texture2D(char * filename)
 {
 	int comp;
+	// Load the image
 	_image = stbi_load(filename, &_width, &_height, &comp, STBI_rgb_alpha);
 	if (_image == nullptr) throw "Failed to load texture";
 	glGenTextures(1, &_id);
@@ -35,6 +36,8 @@ void Texture2D::Init()
 	while (ydim2 <= _height)
 		ydim2 *= 2;
 	ydim2 /= 2;
+
+	// rescale it is not a 
 	if ((_width != xdim2) || (_height != ydim2))
 	{
 		_rescaledImageData = (unsigned long *) ::realloc(_rescaledImageData,
@@ -48,11 +51,13 @@ void Texture2D::Init()
 		imgp = _image;
 
 	glBindTexture(GL_TEXTURE_2D, _id);
-
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, xdim2, ydim2, 0, GL_RGBA,
-		GL_UNSIGNED_BYTE, imgp);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-	glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	{
+		// Set textre parameters
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, xdim2, ydim2, 0, GL_RGBA,
+			GL_UNSIGNED_BYTE, imgp);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 
 }

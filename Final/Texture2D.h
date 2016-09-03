@@ -1,6 +1,7 @@
 #pragma once
 #include "Utils.h"
 
+// Handle texture loading and binding
 class Texture2D
 {
 public:

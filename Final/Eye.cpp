@@ -54,7 +54,7 @@ void Eye::SetLocation(Vector3f followObjectLocation)
 	case ViewMode::light:
 	{
 		location = followObjectLocation - direction * BEHIND_ROBOT_LENGTH;
-		if (location[1] < 0.1) location[1] = 0.1;
+		if (location[1] < 0.1f) location[1] = 0.1f;
 		break;
 	}
 	case ViewMode::freeCamera:

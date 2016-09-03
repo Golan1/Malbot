@@ -24,13 +24,24 @@ void Hand::Draw()
 {
 	palm->Draw();
 
+	// Move to the end of the palm
 	glTranslatef((-palm->size[0] + phalanx->size[0]) / 2, palm->size[1] + PHALANX_SPACE, 0);
+
+	// Rotate the phalanx row
 	glRotatef(fistAngle, 1, 0, 0);
 	drawPhalanxRow();
+
+	// Move to the next row
 	glTranslatef(0, phalanx->size[1] + PHALANX_SPACE, 0);
+
+	// Rotate the phalanx row
 	glRotatef(fistAngle, 1, 0, 0);
 	drawPhalanxRow();
+
+	// Move to the next row
 	glTranslatef(0, phalanx->size[1] + PHALANX_SPACE, 0);
+
+	// Rotate the phalanx row
 	glRotatef(fistAngle, 1, 0, 0);
 	drawPhalanxRow(true);
 }

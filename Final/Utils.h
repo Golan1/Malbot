@@ -11,16 +11,16 @@
 
 enum  class Side { Both, Right, Left };
 
+// General utils
 class Utils
 {
 public:
-	static char keys[26];
+	static bool keys[26];
 
 	inline static GLfloat degToRad(GLfloat x) { return x * PI / 180; };
 	inline static void glScalefv(Vector3f vec) { glScalef(vec[0], vec[1], vec[2]); }
 	inline static void glTranslatefv(Vector3f vec) { glTranslatef(vec[0], vec[1], vec[2]); }
 	static void print(GLint x, GLint y, GLint z, char *str, void *font);
-	static void print(GLfloat x, GLfloat y, void * font, char *format, ...);
 	static bool isKeyPressed(char key);
 	static Vector3f getDirectionVector(GLfloat theta, GLfloat phi);
 	

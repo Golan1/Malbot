@@ -1,10 +1,13 @@
 #pragma once
 #include "Utils.h"
 
+// Hold data of material
 class Material
 {
 public:
 	Material(Vector4f ambient, Vector4f diffues, Vector4f specular, GLfloat shininess);
+
+	// base color is multiplied by each factor to get the same desired color in all the light options
 	Material(Vector4f baseColor, GLfloat ambientFactor, GLfloat diffuseFactor, GLfloat specularFactor, GLfloat shininess);
 	~Material();
 	void Set() const;

@@ -7,16 +7,24 @@
 
 enum class ViewMode { firstPerson, thirdPerson, light, freeCamera };
 
+// Handling the camera
 class Eye
 {
 public:
 	Eye();
 	~Eye();
 
+	//  Change between different view modes
 	void SwitchViewMode();
 	void SetViewMode(ViewMode v);
+
+	// Set the camera's direction
 	void SetDirection(GLfloat theta, GLfloat phi);
+
+	// Set the camera's location by an object's position (the robot's for example)
 	void SetLocation(Vector3f followObjectLocation);
+
+	// Set the look at transformation
 	void Activate();
 
 	inline ViewMode getViewMode(){ return viewMode; }

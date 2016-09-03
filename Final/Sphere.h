@@ -1,5 +1,7 @@
 #pragma once
 #include "Drawable.h"
+
+// Basic sphere
 class Sphere :
 	public Drawable
 {

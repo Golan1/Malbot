@@ -16,9 +16,9 @@ bool AnimationStep::Execute(msecs currentTime) {
 	if (currentTime < startTime) return false; 
 	else if(currentTime > endTime) return true;
 
-	GLfloat length = endTime - startTime;
+	int length = endTime - startTime;
 
-	GLfloat currentValue = startValue + (currentTime - startTime) / length * (endValue - startValue);
+	GLfloat currentValue = startValue + (currentTime - startTime) / (GLfloat)length * (endValue - startValue);
 
 	switch (animation)
 	{

@@ -1,6 +1,6 @@
 #pragma once
 
-
+// Handle animation sounds
 class Wave {
 
 public:

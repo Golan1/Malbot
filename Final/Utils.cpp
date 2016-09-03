@@ -1,7 +1,7 @@
 #include "Utils.h"
 #include <stdio.h>
 
-char Utils::keys[26];
+bool Utils::keys[26];
 
 void Utils::print(GLint x, GLint y, GLint z, char * str, void * font)
 {
@@ -25,6 +25,7 @@ bool Utils::isKeyPressed(char key)
 	return false;
 }
 
+// Get spherical direction according to the angles
 Vector3f Utils::getDirectionVector(GLfloat theta, GLfloat phi)
 {
 	GLfloat p = Utils::degToRad(phi);

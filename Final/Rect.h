@@ -1,5 +1,7 @@
 #pragma once
 #include "Drawable.h"
+
+//Basic cube
 class Rect : public Drawable
 {
 public:

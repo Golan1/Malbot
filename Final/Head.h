@@ -4,6 +4,7 @@
 
 #define HEAD_MAX_LOOKING_ANGLE 0
 
+// The robot's head
 class Head :
 	public Rect
 {
@@ -14,6 +15,7 @@ public:
 	void Init();
 	void Draw();
 
+	// Set the head direction according to the view direction
 	void SetDirection(GLfloat t, GLfloat p);
 
 private:

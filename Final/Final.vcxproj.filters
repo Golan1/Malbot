@@ -146,13 +146,13 @@
     <ClInclude Include="AnimationManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationInit.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Wave.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

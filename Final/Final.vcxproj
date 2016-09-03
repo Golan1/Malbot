@@ -148,10 +148,10 @@
     <ClInclude Include="Floor.h" />
     <ClInclude Include="Hand.h" />
     <ClInclude Include="Head.h" />
+    <ClInclude Include="Resource.h" />
     <ClInclude Include="Light.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="Rect.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="Robot.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="stb_image.h" />

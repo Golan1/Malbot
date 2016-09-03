@@ -247,6 +247,8 @@ Vector3f Robot::GetLocation()
 void Robot::SetAngle(GLfloat angle) {
 	robotAngle = angle;
 
+	// Setting the direction according to the angle
+	// We need the direction to determine later where is "forward" when we want to move
 	GLfloat a = Utils::degToRad(robotAngle + 90);
 
 	direction = { cosf(a), 0.0f, sinf(a) };

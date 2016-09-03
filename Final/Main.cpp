@@ -180,7 +180,7 @@ void myDisplay()
 
 	GLenum err = glGetError();
 	if (err != GL_NO_ERROR) {
-		printf("\%d", err);
+		printf("%d", err);
 	}
 
 	glFlush();
@@ -190,6 +190,7 @@ void myPassiveMotion(int x, int y) {
 	int boundry = winWidth - 1;
 	const int margin = 15;
 
+	// Move the cursor to the other side in case we got to the end of the window to make a fluent movement in the x,z pane
 	if (x <= margin) {
 		x = startX = boundry - 1 - margin;
 		glutWarpPointer(x, y);
@@ -199,12 +200,14 @@ void myPassiveMotion(int x, int y) {
 		glutWarpPointer(x, y);
 	}
 
+	// Sets the degrees according to the cursor location
 	vphi += (startX - x) / 3.0f;
 	startX = x;
 
 	vtheta = y / (GLfloat)winHeight * 180;
 }
 
+// Sets perspective projection
 void setProjection() {
 	glViewport(0, 0, winWidth, winHeight);
 
@@ -223,11 +226,12 @@ void myReshape(int width, int height)
 
 void myKeyboard(unsigned char key, int x, int y)
 {
+	// If letter was clicked
 	if (key >= 65 && key <= 90) {
-		Utils::keys[key - 65] = 1;
+		Utils::keys[key - 65] = true;
 	}
 	else if (key >= 97 && key <= 122) {
-		Utils::keys[key - 97] = 1;
+		Utils::keys[key - 97] = true;
 	}
 
 	switch (key)
@@ -249,6 +253,7 @@ void myKeyboard(unsigned char key, int x, int y)
 		break;
 	}
 
+	// if digit was clicked
 	if (key >= 48 && key <= 57) {
 		int digit = key - 48;
 
@@ -263,13 +268,14 @@ void myKeyboard(unsigned char key, int x, int y)
 
 void myKeyboardUp(unsigned char key, int x, int y) {
 	if (key >= 65 && key <= 90) {
-		Utils::keys[key - 65] = 0;
+		Utils::keys[key - 65] = false;
 	}
 	else if (key >= 97 && key <= 122) {
-		Utils::keys[key - 97] = 0;
+		Utils::keys[key - 97] = false;
 	}
 }
 
+// Calculate changes each game iteration
 void calcChanges() {
 	animationManager->Animate();
 
@@ -302,6 +308,7 @@ void calcChanges() {
 	}
 }
 
+// Excute iterations
 void myTimer(int interval) {
 
 	calcChanges();
@@ -309,6 +316,7 @@ void myTimer(int interval) {
 	glutTimerFunc(interval, myTimer, interval);
 }
 
+// Check for mouse scrolling
 void myMouse(int button, int state, int x, int y)
 {
 	if (button == 3 || button == 4) {
@@ -338,6 +346,7 @@ void myMouse(int button, int state, int x, int y)
 	//y = winHeight - y - 1;
 }
 
+// Reset scene to its default properties
 void resetScene() {
 	vphi = 0.0f;
 
@@ -353,6 +362,7 @@ void resetScene() {
 	eye->SetViewMode(ViewMode::firstPerson);
 }
 
+// Creating all the scene objects
 void generateModels() {
 
 	robot = new Robot();
@@ -369,28 +379,32 @@ void generateModels() {
 
 	instructionsTexture = new Texture2D("Textures\\instructions.jpg");
 	instructionsTexture->Init();
-
 	_instructionsMaterial = new Material(Light::WhiteColor, 0.2f, 1.0f, 0.5f, 50.0f);
+
 	//_teapotMaterial = new Material(Light::WhiteColor, 0.1f, 0.5f, 1.0f, 50.0f);
 }
 
+// Initializing opengl required properties
 void init()
 {
 	generateModels();
 
 	glClearColor(0.7f, 0.7f, 0.7f, 1.0f);
 
+	// Light
 	glEnable(GL_LIGHTING);
 	glShadeModel(GL_SMOOTH);
-
 	glEnable(GL_NORMALIZE);
 
+	// Fog
 	glEnable(GL_FOG);
 	glFogi(GL_FOG_MODE, GL_EXP2);
 	glFogf(GL_FOG_DENSITY, 0.02f);
 
+	// Antialiasing
 	glutSetOption(GLUT_MULTISAMPLE, 8);
 
+	// Depth checking
 	glEnable(GL_DEPTH_TEST);
 
 	glutFullScreen();
@@ -451,7 +465,6 @@ int main(int argc, char** argv)
 	int windowId;
 
 	glutInit(&argc, argv);
-	//glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
 	windowId = glutCreateWindow("WOW!");
 	createMenus();

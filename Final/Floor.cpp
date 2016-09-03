@@ -34,6 +34,7 @@ void Floor::Init()
 
 	GLint limit = -_size / 2;
 
+	// Create multiple texture
 	for (i = 0; i < _size; i += 1)
 	{
 		for (j = 1; j <= _size; j += 1)

@@ -63,26 +63,26 @@ void Arm::Draw()
 	glScalef(0.25f, 0.25f, 0.25f);
 	
 	// rotateShoulder
-	glRotatef(shoulderAngle, 1, 0, 0);
+	glRotatef(shoulderAngle, 1.0f, 0.0f, 0.0f);
 
 	upperArm->Draw();
 
 	// move to (almost) the end of the upperr arm
-	glTranslatef(0, upperArm->size[1] + 0.3 * elbow->radius, 0);
+	glTranslatef(0.0f, upperArm->size[1] + 0.3f * elbow->radius, 0.0f);
 	elbow->Draw();
 
 	// move to (almost) the end of the elbow
 	glPushMatrix();
 	{
-		glRotatef(elbowAngle, -1, 0, 0);
-		glTranslatef(0, elbow->radius * 0.7, 0);
+		glRotatef(elbowAngle, -1.0f, 0.0f, 0.0f);
+		glTranslatef(0.0f, elbow->radius * 0.7f, 0.0f);
 		lowerArm->Draw();
 
 		glPushMatrix();
 		{
 			// move to the end of the arm
-			glTranslatef(0, lowerArm->size[1], 0);
-			glScalef(0.5, 0.5, 0.5);
+			glTranslatef(0.0f, lowerArm->size[1], 0.0f);
+			glScalef(0.5f, 0.5f, 0.5f);
 			hand->Draw();
 		}
 		glPopMatrix();

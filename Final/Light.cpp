@@ -25,31 +25,39 @@ void Light::Activate()
 {
 	glPushMatrix();
 
+	// move to the wanted location
 	Utils::glTranslatefv(location.vec);
 
 	// rotate the cone according to the user's defined vector
 	glRotatef(phi, 0, 1, 0);
 	glRotatef(90 + theta, 1, 0, 0);
 
+	// Create "lamp"
 	glutWireCone(0.5f + focus / MAX_FOCUS * 0.5, 1.0f, 10, 10);
 
+	// Setting direction and location according to the phi, theta and location
 	glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, defaultDirection.vec);
 	glLightfv(GL_LIGHT0, GL_POSITION, defaultLocation.vec);
 	glPopMatrix();
 
+	// setting global ambient
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (Light::WhiteColor * globalAmbient).vec);
 
+	// Set light options
 	glLightfv(GL_LIGHT0, GL_AMBIENT, Light::WhiteColor.vec);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, Light::WhiteColor.vec);
 	glLightfv(GL_LIGHT0, GL_SPECULAR, Light::WhiteColor.vec);
 
+	// Set Attenuation options
 	glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, attenuation);
 	glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.1f);
 	glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0f);
 
+	// Set spotlight options
 	glLightf(GL_LIGHT0, GL_SPOT_CUTOFF, focus);
 	glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 6.0f);
 
+	// ON!
 	glEnable(GL_LIGHT0);
 }
 
@@ -74,22 +82,6 @@ void Light::CalcMovement()
 
 	if (location[1] < 0.1f) location[1] = 0.1f;
 }
-//
-//void Light::CalcAttenuation() {
-//	if (Utils::isKeyPressed('y')) {
-//		SetAttenuation(attenuation - ATTENUATION_DELTA);
-//	}
-//	else if (Utils::isKeyPressed('h')) {
-//		SetAttenuation(attenuation + ATTENUATION_DELTA);
-//	}
-//
-//	if (Utils::isKeyPressed('u')) {
-//		SetFocus(focus - FOCUS_DELTA);
-//	}
-//	else if (Utils::isKeyPressed('j')) {
-//		SetFocus(focus + FOCUS_DELTA);
-//	}
-//}
 
 void Light::ControlFocus(int direction) {
 	SetFocus(focus - FOCUS_DELTA * direction);

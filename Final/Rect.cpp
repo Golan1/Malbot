@@ -17,8 +17,9 @@ void Rect::Init() {
 	glNewList(_listId, GL_COMPILE);
 	glPushMatrix();
 
-	Utils::glScalefv(size);
-	glTranslatef(0, 0.5, 0);
+	Utils::glScalefv(size); // scale to the correct size
+
+	glTranslatef(0, 0.5, 0); // start from the base of the cube
 
 	_isSolid ? glutSolidCube(1.0) : glutWireCube(1.0);
 
