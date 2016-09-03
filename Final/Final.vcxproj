@@ -118,7 +118,6 @@
     <ClCompile Include="AnimationManager.cpp" />
     <ClCompile Include="AnimationStep.cpp" />
     <ClCompile Include="Arm.cpp" />
-    <ClCompile Include="Body.cpp" />
     <ClCompile Include="Drawable.cpp" />
     <ClCompile Include="Eye.cpp" />
     <ClCompile Include="Floor.cpp" />
@@ -142,7 +141,6 @@
     <ClInclude Include="AnimationManager.h" />
     <ClInclude Include="AnimationStep.h" />
     <ClInclude Include="Arm.h" />
-    <ClInclude Include="Body.h" />
     <ClInclude Include="Drawable.h" />
     <ClInclude Include="Eye.h" />
     <ClInclude Include="Floor.h" />
